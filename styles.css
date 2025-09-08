@@ -1,40 +1,62 @@
-/* 🌱 Plant list grid (homepage only) */
-#plant-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 16px;
+body {
+  font-family: Arial, sans-serif;
+  background: #f9f9f9;
   padding: 20px;
 }
 
-/* 🌱 Each plant card */
-.plant-card {
+header, footer {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.card {
   background: white;
   border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  box-shadow: 0 4px 20px rgba(2,8,23,.08);
   overflow: hidden;
   border: 1px solid #e2e8f0;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  padding: 14px;
+  padding: 10px;
+  margin: 10px;
+  width: 200px;
+  display: inline-block;
+  vertical-align: top;
   text-align: center;
 }
 
-.plant-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 6px 24px rgba(2,8,23,.12);
+.card img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
 }
 
-/* 🌱 Plant name */
-.plant-card h3 {
-  font-weight: 700;
-  margin: 0 0 6px;
-  font-size: 18px;
-  color: #0f172a;
+.plant-container {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  max-width: 900px;
+  margin: auto;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
 }
 
-/* 🌱 Scientific name */
-.plant-card p {
-  margin: 0;
-  color: #475569;
-  font-size: 14px;
-  font-style: italic;
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+th {
+  width: 30%;
+  background: #f2f2f2;
+}
+
+.images img {
+  width: 150px;
+  margin: 5px;
+  border-radius: 8px;
+  cursor: pointer;
 }
