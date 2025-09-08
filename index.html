@@ -5,6 +5,31 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Smart Campus Plant Information</title>
   <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Optional basic styles */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+      margin-top: 20px;
+    }
+    .card {
+      background: white;
+      padding: 12px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      text-align: center;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    }
+    .card img {
+      max-width: 100%;
+      border-radius: 8px;
+    }
+  </style>
 </head>
 <body>
   <header>
@@ -16,7 +41,8 @@
 
     <!-- Plant list container -->
     <div id="plant-list" class="grid">Loading plants...</div>
-    <!-- Optional error container -->
+
+    <!-- Error container for debug -->
     <div id="error-message" style="color:red; text-align:center; margin-top:10px;"></div>
   </main>
 
