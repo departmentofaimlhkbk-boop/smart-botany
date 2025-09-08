@@ -3,7 +3,9 @@ async function loadPlants() {
   container.innerHTML = "Loading plants...";
 
   try {
+    console.log("Fetching plants from Supabase...");
     const { data: plants, error } = await supabase.from("plants").select("*");
+    console.log("Plants fetched:", plants, error);
 
     if (error) {
       container.innerHTML = "<p>❌ Error loading plants.</p>";
@@ -31,7 +33,7 @@ async function loadPlants() {
     });
   } catch (err) {
     container.innerHTML = "<p>❌ Something went wrong while loading plants.</p>";
-    console.error(err);
+    console.error("Unexpected error:", err);
   }
 }
 
