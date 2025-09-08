@@ -1,12 +1,21 @@
+// plant.js - load plant details dynamically by ID
+
 async function loadPlantDetails() {
   const params = new URLSearchParams(window.location.search);
   const plantId = params.get("id");
+
   const container = document.getElementById("plant-card");
+  if (!container) {
+    console.error("❌ Container with ID 'plant-card' not found.");
+    return;
+  }
 
   if (!plantId) {
     container.innerHTML = "<p>❌ No plant selected.</p>";
     return;
   }
+
+  console.log("Fetching plant with ID:", plantId);
 
   try {
     const { data: plant, error } = await supabase
@@ -15,31 +24,44 @@ async function loadPlantDetails() {
       .eq("id", plantId)
       .single();
 
-    if (error || !plant) {
+    if (error) {
+      console.error("Error fetching plant:", error);
       container.innerHTML = "<p>❌ Error loading plant.</p>";
       return;
     }
 
-    // Multiple images
-    let imagesHTML = "-";
-    if (plant.image_urls) {
-      imagesHTML = plant.image_urls
-        .split(",")
-        .map(url => url.trim())
-        .map(url => `
-          <a href="${url}" data-lightbox="plant" data-title="${plant.common_name}">
-            <img src="${url}" alt="${plant.common_name}" style="width:150px; margin:5px;" />
-          </a>
-        `).join("");
+    if (!plant) {
+      container.innerHTML = "<p>❌ Plant not found.</p>";
+      return;
     }
 
-    // Make additional info clickable
-    let additionalInfo = plant.additional_info
-      ? plant.additional_info.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank">$1</a>')
+    console.log("Fetched plant:", plant);
+
+    // Multiple images with Lightbox
+    let imagesHTML = "-";
+    if (plant.image_urls) {
+      const urls = plant.image_urls.split(",").map(url => url.trim());
+      imagesHTML = urls
+        .map(
+          (url, idx) => `
+          <a href="${url}" data-lightbox="plant" data-title="${plant.common_name} - Image ${idx + 1}">
+            <img src="${url}" alt="${plant.common_name}" style="width:150px; margin:5px;" />
+          </a>`
+        )
+        .join("");
+    }
+
+    // Make links clickable in Additional Info
+    const additionalInfo = plant.additional_info
+      ? plant.additional_info.replace(
+          /(https?:\/\/[^\s]+)/g,
+          '<a href="$1" target="_blank">$1</a>'
+        )
       : "-";
 
+    // Populate HTML
     container.innerHTML = `
-      <h2>${plant.common_name} (${plant.scientific_name})</h2>
+      <h2>${plant.common_name || "-"} (${plant.scientific_name || "-"})</h2>
       <table>
         <tr><th>Category</th><td>${plant.category || "-"}</td></tr>
         <tr><th>Date of Planting</th><td>${plant.date_of_planting || "-"}</td></tr>
@@ -55,9 +77,10 @@ async function loadPlantDetails() {
       </table>
     `;
   } catch (err) {
+    console.error("Unexpected error:", err);
     container.innerHTML = "<p>❌ Something went wrong while loading plant.</p>";
-    console.error(err);
   }
 }
 
+// Run after page load
 window.onload = loadPlantDetails;
