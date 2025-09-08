@@ -1,39 +1,38 @@
-// app.js (homepage with grid cards)
 async function loadPlants() {
-  let { data, error } = await supabase.from("plants").select("*");
-
-  if (error) {
-    console.error("Error fetching plants:", error.message);
-    document.getElementById("plant-list").innerHTML = "❌ Failed to load plants.";
-    return;
-  }
-
   const container = document.getElementById("plant-list");
-  container.innerHTML = "";
+  container.innerHTML = "Loading plants...";
 
-  if (!data || data.length === 0) {
-    container.innerHTML = "<p>No plant records found in database.</p>";
-    return;
+  try {
+    const { data: plants, error } = await supabase.from("plants").select("*");
+
+    if (error) {
+      container.innerHTML = "<p>❌ Error loading plants.</p>";
+      console.error(error);
+      return;
+    }
+
+    if (!plants || plants.length === 0) {
+      container.innerHTML = "<p>No plants found.</p>";
+      return;
+    }
+
+    container.innerHTML = "";
+
+    plants.forEach((plant) => {
+      const card = document.createElement("div");
+      card.className = "card";
+      card.innerHTML = `
+        <img src="${plant.image_urls?.split(',')[0] || ''}" alt="${plant.common_name}" />
+        <h3>${plant.common_name || '-'}</h3>
+        <p><strong>Scientific Name:</strong> ${plant.scientific_name || '-'}</p>
+        <a href="plant.html?id=${plant.id}">View Details</a>
+      `;
+      container.appendChild(card);
+    });
+  } catch (err) {
+    container.innerHTML = "<p>❌ Something went wrong while loading plants.</p>";
+    console.error(err);
   }
-
-  data.forEach(plant => {
-    const div = document.createElement("div");
-    div.className = "card";
-
-    const commonName = plant.common_name || "Unknown";
-    const scientificName = plant.scientific_name || "";
-
-    div.innerHTML = `
-      <a href="plant.html?id=${plant.id}">
-        <div class="body">
-          <h3 class="title">${commonName}</h3>
-          <p class="sub"><em>${scientificName}</em></p>
-        </div>
-      </a>
-    `;
-
-    container.appendChild(div);
-  });
 }
 
 window.onload = loadPlants;
