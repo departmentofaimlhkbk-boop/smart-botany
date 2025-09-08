@@ -7,10 +7,11 @@
 
   <!-- Lightbox CSS -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css" rel="stylesheet" />
+  <!-- Custom styles -->
   <link rel="stylesheet" href="styles.css">
 
   <style>
-    /* Optional inline styles for plant details */
+    /* Inline styles for plant details */
     .plant-container {
       background: white;
       padding: 20px;
@@ -59,11 +60,9 @@
     Loading plant details...
   </div>
 
-  <!-- Supabase and scripts -->
- <link rel="stylesheet" href="styles.css">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-<script src="config.js"></script>
-<script src="plant.js"></script>
-
+  <!-- Scripts: Supabase first, then config.js, then plant.js -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <script src="config.js"></script>
+  <script src="plant.js"></script>
 </body>
 </html>
