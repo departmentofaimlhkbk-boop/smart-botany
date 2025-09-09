@@ -53,9 +53,39 @@
     .images img:hover {
       transform: scale(1.05);
     }
+
+    /* New header styles */
+    .page-header {
+      text-align: center;
+      margin: 20px auto 30px auto;
+    }
+    .main-title {
+      font-size: 28px;
+      font-weight: bold;
+      color: #222;
+    }
+    .sub-title {
+      font-size: 20px;
+      font-weight: 500;
+      color: #444;
+      margin-top: 5px;
+    }
+    .project-title {
+      font-size: 18px;
+      font-weight: normal;
+      color: #2e7d32; /* green like plant icon */
+      margin-top: 5px;
+    }
   </style>
 </head>
 <body>
+  <!-- ✅ Added header section -->
+  <header class="page-header">
+    <h1 class="main-title">HKBK College Of Engineering</h1>
+    <h2 class="sub-title">Department of AIML</h2>
+    <h3 class="project-title">🌱 Campus Plant Information Management System</h3>
+  </header>
+
   <div class="plant-container" id="plant-card">
     Loading plant details...
   </div>
