@@ -38,23 +38,15 @@ header, footer {
   box-shadow: 0 4px 20px rgba(0,0,0,0.1);
 }
 
-/* Table Styles */
 table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 10px;
-  table-layout: fixed; /* prevents overflow */
-  word-wrap: break-word;
-  word-break: break-word;
 }
 
 th, td {
   border: 1px solid #ddd;
   padding: 8px;
-  vertical-align: top;
-  text-align: left;
-  overflow-wrap: break-word;
-  white-space: normal;
 }
 
 th {
@@ -62,45 +54,10 @@ th {
   background: #f2f2f2;
 }
 
-/* Image styles inside plant details */
 .images img {
   width: 150px;
   margin: 5px;
   border-radius: 8px;
   cursor: pointer;
 }
-
-/* 📱 Mobile Responsive Table */
-@media (max-width: 768px) {
-  table, thead, tbody, tr, td, th {
-    display: block;
-    width: 100%;
-  }
-
-  tr {
-    margin-bottom: 15px;
-    border: 1px solid #ddd;
-    padding: 10px;
-    border-radius: 8px;
-    background: #fff;
-  }
-
-  th {
-    display: none; /* hide table headers on mobile */
-  }
-
-  td {
-    border: none;
-    display: flex;
-    justify-content: space-between;
-    padding: 8px;
-  }
-
-  td::before {
-    content: attr(data-label);
-    font-weight: bold;
-    margin-right: 10px;
-    flex-shrink: 0;
-    color: #333;
-  }
-}
+styles.css
