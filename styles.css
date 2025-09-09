@@ -77,3 +77,26 @@ header, footer {
   border-radius: 8px;
   cursor: pointer;
 }
+
+/* ✅ New header styles for Plant Page */
+.page-header {
+  text-align: center;
+  margin: 20px auto 30px auto;
+}
+.main-title {
+  font-size: 28px;
+  font-weight: bold;
+  color: #222;
+}
+.sub-title {
+  font-size: 20px;
+  font-weight: 500;
+  color: #444;
+  margin-top: 5px;
+}
+.project-title {
+  font-size: 18px;
+  font-weight: normal;
+  color: #2e7d32; /* green like plant icon */
+  margin-top: 5px;
+}
