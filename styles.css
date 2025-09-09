@@ -38,11 +38,12 @@ header, footer {
   box-shadow: 0 4px 20px rgba(0,0,0,0.1);
 }
 
+/* ✅ Plant details table */
 table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 10px;
-  table-layout: fixed; /* ✅ Force equal columns */
+  table-layout: fixed; /* keeps columns consistent */
 }
 
 th, td {
@@ -55,20 +56,19 @@ th, td {
   word-wrap: break-word;
   overflow-wrap: break-word;
   white-space: normal;
-  max-width: 1px; /* ✅ forces wrapping instead of stretching */
 }
 
 th {
   width: 30%;
+  min-width: 120px; /* ✅ prevents breaking into single letters */
   background: #f2f2f2;
 }
 
-/* ✅ Make tables responsive on mobile */
+/* ✅ Responsive table for small screens */
 @media (max-width: 768px) {
   table {
     display: block;
-    overflow-x: auto;
-    white-space: normal;
+    overflow-x: auto; /* scroll horizontally if needed */
   }
 
   th, td {
