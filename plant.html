@@ -1,98 +1,123 @@
-<style>
-  /* Inline styles for plant details */
-  .plant-container {
-    background: white;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-    max-width: 900px;
-    margin: 40px auto;
-    overflow-x: auto; /* allow scrolling if table too wide */
-  }
-  .plant-container h2 {
-    text-align: center;
-    margin-bottom: 20px;
-  }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plant Details</title>
 
-  /* ✅ Make table responsive */
-  .plant-table {
-    width: 100%;
-    border-collapse: collapse;
-    table-layout: fixed; /* prevents overflow */
-    word-wrap: break-word;
-  }
-  .plant-table th, .plant-table td {
-    border: 1px solid #ddd;
-    padding: 12px;
-    text-align: left;
-    vertical-align: top;
-    word-break: break-word; /* ✅ breaks long words */
-    white-space: normal;    /* ✅ wraps text */
-  }
-  .plant-table th {
-    background: #f2f2f2;
-    width: 30%;
-  }
+  <!-- Lightbox CSS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css" rel="stylesheet" />
+  <!-- Custom styles -->
+  <link rel="stylesheet" href="styles.css">
 
-  /* ✅ Responsive images */
-  .images {
-    display: flex;
-    gap: 12px;
-    margin-top: 15px;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-  .images img {
-    max-width: 100%;     /* ✅ never exceeds screen width */
-    height: auto;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-    cursor: pointer;
-    transition: transform 0.2s ease-in-out;
-  }
-  .images img:hover {
-    transform: scale(1.05);
-  }
+  <style>
+    /* Inline styles for plant details */
+    .plant-container {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      max-width: 900px;
+      margin: 40px auto;
+    }
+    .plant-container h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .plant-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .plant-table th, .plant-table td {
+      border: 1px solid #ddd;
+      padding: 12px;
+      text-align: left;
+    }
+    .plant-table th {
+      background: #f2f2f2;
+      width: 30%;
+    }
+    .images {
+      display: flex;
+      gap: 12px;
+      margin-top: 15px;
+      flex-wrap: wrap;
+    }
+    .images img {
+      width: 200px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      cursor: pointer;
+      transition: transform 0.2s ease-in-out;
+    }
+    .images img:hover {
+      transform: scale(1.05);
+    }
 
-  /* New header styles */
-  .page-header {
-    text-align: center;
-    margin: 20px auto 30px auto;
-  }
-  .main-title {
-    font-size: 28px;
-    font-weight: bold;
-    color: #222;
-  }
-  .sub-title {
-    font-size: 20px;
-    font-weight: 500;
-    color: #444;
-    margin-top: 5px;
-  }
-  .project-title {
-    font-size: 18px;
-    font-weight: normal;
-    color: #2e7d32; /* green like plant icon */
-    margin-top: 5px;
-  }
+    /* New header styles */
+    .page-header {
+      text-align: center;
+      margin: 20px auto 30px auto;
+    }
+    .main-title {
+      font-size: 28px;
+      font-weight: bold;
+      color: #222;
+    }
+    .sub-title {
+      font-size: 20px;
+      font-weight: 500;
+      color: #444;
+      margin-top: 5px;
+    }
+    .project-title {
+      font-size: 18px;
+      font-weight: normal;
+      color: #2e7d32; /* green like plant icon */
+      margin-top: 5px;
+    }
 
-  /* ✅ Main Page button */
-  .main-page-btn {
-    display: inline-block;
-    margin: 10px auto 20px auto;
-    padding: 8px 16px;
-    background: #2e7d32;
-    color: white;
-    border-radius: 6px;
-    text-decoration: none;
-    font-weight: bold;
-    transition: background 0.3s;
-  }
-  .main-page-btn:hover {
-    background: #1b5e20;
-  }
-  .main-page-container {
-    text-align: center;
-  }
-</style>
+    /* ✅ Main Page button */
+    .main-page-btn {
+      display: inline-block;
+      margin: 10px auto 20px auto;
+      padding: 8px 16px;
+      background: #2e7d32;
+      color: white;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+    .main-page-btn:hover {
+      background: #1b5e20;
+    }
+    .main-page-container {
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <!-- ✅ Header section (already there) -->
+  <header class="page-header">
+    <h1 class="main-title">HKBK College Of Engineering</h1>
+    <h2 class="sub-title">Department of AIML</h2>
+    <h3 class="project-title">🌱 Campus Plant Information Management System</h3>
+  </header>
+
+  <!-- ✅ Main Page button -->
+  <div class="main-page-container">
+    <a href="index.html" class="main-page-btn">🏠 Main Page</a>
+  </div>
+
+  <div class="plant-container" id="plant-card">
+    Loading plant details...
+  </div>
+
+  <!-- Scripts: Supabase first, then config.js, then plant.js -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <script src="config.js"></script>
+  <script src="plant.js"></script>
+</body>
+</html>
+this is my plant.html... update according to ur suggestions
