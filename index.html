@@ -12,18 +12,38 @@
       margin-top: 20px;
       justify-content: center;
     }
+
+    /* Updated card style */
     .plant-card {
-      width: 200px;
+      width: 180px;               /* fixed width for all cards */
       border: 1px solid #ccc;
       padding: 10px;
       text-align: center;
       border-radius: 8px;
       box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;                  /* spacing between image and text */
+      transition: transform 0.2s;
     }
+
+    .plant-card:hover {
+      transform: translateY(-3px);
+    }
+
+    /* Updated image style */
     .plant-card img {
-      width: 100%;
-      height: auto;
+      width: 100%;                /* fit card width */
+      height: 120px;              /* fixed height */
+      object-fit: cover;          /* maintain aspect ratio, crop if needed */
       border-radius: 5px;
+    }
+
+    .plant-card h3 {
+      margin: 0;
+      font-size: 16px;
+      color: #333;
     }
   </style>
 </head>
@@ -33,7 +53,7 @@
 
   <div id="plant-list">Loading plants...</div>
 
-  <!-- New container for plant image gallery -->
+  <!-- Plant gallery -->
   <h2>Plant Gallery</h2>
   <div id="plant-gallery">Loading images...</div>
 
@@ -47,7 +67,7 @@
   <script src="app.js"></script>
 
   <script>
-    // Optional: dynamically load plant images if app.js does not handle it
+    // Dynamically load plant images
     async function loadPlantImages() {
       const { data: plants, error } = await supabase
         .from('plants') // replace with your actual table name
@@ -72,7 +92,6 @@
       });
     }
 
-    // Call the function
     loadPlantImages();
   </script>
 
