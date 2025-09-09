@@ -22,7 +22,7 @@ async function loadPlants() {
 
     plants.forEach((plant) => {
       const card = document.createElement("div");
-      card.className = "card";
+      card.className = "plant-card"; // <-- updated class to match CSS
       card.innerHTML = `
         <img src="${plant.image_urls?.split(',')[0] || ''}" alt="${plant.common_name}" />
         <h3>${plant.common_name || '-'}</h3>
