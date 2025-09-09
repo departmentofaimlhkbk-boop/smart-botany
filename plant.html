@@ -54,7 +54,7 @@
       transform: scale(1.05);
     }
 
-    /* New header styles */
+    /* ✅ Header styles */
     .page-header {
       text-align: center;
       margin: 20px auto 30px auto;
@@ -73,7 +73,7 @@
     .project-title {
       font-size: 18px;
       font-weight: normal;
-      color: #2e7d32; /* green like plant icon */
+      color: #2e7d32;
       margin-top: 5px;
     }
 
@@ -95,20 +95,27 @@
     .main-page-container {
       text-align: center;
     }
+
+    /* ✅ Credits footer */
+    .credits {
+      text-align: center;
+      font-family: "Times New Roman", Times, serif;
+      font-size: 13px;
+      color: #555;
+      margin: 30px 15px 10px 15px;
+      line-height: 1.4;
+    }
+
+    @media (max-width: 768px) {
+      .credits {
+        font-size: 12px;
+        margin: 20px 10px;
+      }
+    }
   </style>
 </head>
-    ...
-  <div id="plant-list"></div>
-
-  <footer class="credits">
-    designed and developed by Kishan, Gowthami, Jaffer, Khushi from the Dept. of AIML 
-    under the guidance of Dr. Tabassum Ara, HoD and Prof. Bharath V, Dept. of AIML
-  </footer>
-</body>
-</html>
-
 <body>
-  <!-- ✅ Header section (already there) -->
+  <!-- ✅ Header section -->
   <header class="page-header">
     <h1 class="main-title">HKBK College Of Engineering</h1>
     <h2 class="sub-title">Department of AIML</h2>
@@ -124,10 +131,15 @@
     Loading plant details...
   </div>
 
+  <!-- ✅ Credits Section -->
+  <footer class="credits">
+    designed and developed by Kishan, Gowthami, Jaffer, Khushi from the Dept. of AIML  
+    under the guidance of Dr. Tabassum Ara, HoD and Prof. Bharath V, Dept. of AIML
+  </footer>
+
   <!-- Scripts: Supabase first, then config.js, then plant.js -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
   <script src="config.js"></script>
   <script src="plant.js"></script>
 </body>
 </html>
-
