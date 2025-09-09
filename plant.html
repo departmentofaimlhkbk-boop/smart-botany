@@ -27,11 +27,15 @@
     .plant-table {
       width: 100%;
       border-collapse: collapse;
+      table-layout: fixed;
+      word-wrap: break-word;
     }
     .plant-table th, .plant-table td {
       border: 1px solid #ddd;
       padding: 12px;
       text-align: left;
+      vertical-align: top;
+      white-space: normal;
     }
     .plant-table th {
       background: #f2f2f2;
@@ -95,10 +99,41 @@
     .main-page-container {
       text-align: center;
     }
+
+    /* 📱 Responsive table for mobile */
+    @media (max-width: 768px) {
+      .plant-table, .plant-table thead, .plant-table tbody, .plant-table tr, .plant-table th, .plant-table td {
+        display: block;
+        width: 100%;
+      }
+      .plant-table tr {
+        margin-bottom: 15px;
+        border: 1px solid #ddd;
+        padding: 10px;
+        border-radius: 8px;
+        background: #fff;
+      }
+      .plant-table th {
+        display: none;
+      }
+      .plant-table td {
+        border: none;
+        display: flex;
+        justify-content: space-between;
+        padding: 8px;
+      }
+      .plant-table td::before {
+        content: attr(data-label);
+        font-weight: bold;
+        margin-right: 10px;
+        flex-shrink: 0;
+        color: #333;
+      }
+    }
   </style>
 </head>
 <body>
-  <!-- ✅ Header section (already there) -->
+  <!-- ✅ Header section -->
   <header class="page-header">
     <h1 class="main-title">HKBK College Of Engineering</h1>
     <h2 class="sub-title">Department of AIML</h2>
