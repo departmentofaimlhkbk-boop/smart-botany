@@ -2,53 +2,79 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Campus Plant Information Management System</title>
-  <link rel="stylesheet" href="styles.css">
+  <title>Smart Campus Plant Information</title>
   <style>
-    /* ✅ Header styles copied from plant page */
-    .page-header {
+    /* Plant gallery styles */
+    #plant-gallery {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-top: 20px;
+      justify-content: center;
+    }
+    .plant-card {
+      width: 200px;
+      border: 1px solid #ccc;
+      padding: 10px;
       text-align: center;
-      margin: 20px auto 30px auto;
+      border-radius: 8px;
+      box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
     }
-    .main-title {
-      font-size: 28px;
-      font-weight: bold;
-      color: #222;
-    }
-    .sub-title {
-      font-size: 20px;
-      font-weight: 500;
-      color: #444;
-      margin-top: 5px;
-    }
-    .project-title {
-      font-size: 18px;
-      font-weight: normal;
-      color: #2e7d32; /* green */
-      margin-top: 5px;
+    .plant-card img {
+      width: 100%;
+      height: auto;
+      border-radius: 5px;
     }
   </style>
 </head>
 <body>
+  <h1>Smart Campus Plant Information</h1>
+  <p>Scan a QR code near a plant or browse the list below:</p>
 
-  <!-- ✅ New header section -->
-  <header class="page-header">
-    <h1 class="main-title">HKBK College Of Engineering</h1>
-    <h2 class="sub-title">Department of AIML</h2>
-    <h3 class="project-title">🌱 Campus Plant Information Management System</h3>
-  </header>
+  <div id="plant-list">Loading plants...</div>
 
-  <!-- ✅ Keep the plant-list container so script.js can fill it -->
-  <div id="plant-list"></div>
+  <!-- New container for plant image gallery -->
+  <h2>Plant Gallery</h2>
+  <div id="plant-gallery">Loading images...</div>
 
-  <footer class="site-footer">
-    <p><strong>This project has been developed under the vision and guidance of Dr. Tabassum Ara, Professor and Head, Department of AIML. The development team comprises Jaffer Hameed (1HK23AI017), Kishan Kumar C (1HK23AI021), Gowthami N (1HK23AI010), and Khushi M (1HK23AI020), students of 5th Semester, Department of AIML, HKBK College of Engineering</strong></p>
-    <p class="small-text">&copy; 2025 Smart Campus Project</p>
-  </footer>
-
+  <!-- Supabase client -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+  <!-- Your config -->
   <script src="config.js"></script>
-  <script src="script.js"></script>
+
+  <!-- Your app logic -->
+  <script src="app.js"></script>
+
+  <script>
+    // Optional: dynamically load plant images if app.js does not handle it
+    async function loadPlantImages() {
+      const { data: plants, error } = await supabase
+        .from('plants') // replace with your actual table name
+        .select('*');
+
+      if (error) {
+        console.error('Error loading plants:', error);
+        return;
+      }
+
+      const gallery = document.getElementById('plant-gallery');
+      gallery.innerHTML = ''; // clear "Loading images..."
+
+      plants.forEach(plant => {
+        const card = document.createElement('div');
+        card.className = 'plant-card';
+        card.innerHTML = `
+          <img src="${plant.image_url}" alt="${plant.name}">
+          <h3>${plant.name}</h3>
+        `;
+        gallery.appendChild(card);
+      });
+    }
+
+    // Call the function
+    loadPlantImages();
+  </script>
+
 </body>
 </html>
