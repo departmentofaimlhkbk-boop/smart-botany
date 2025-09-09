@@ -4,18 +4,18 @@
   <meta charset="UTF-8">
   <title>Smart Campus Plant Information</title>
   <style>
-    /* Plant gallery styles */
-    #plant-gallery {
+    /* Homepage plant list layout */
+    #plant-list {
       display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
+      flex-wrap: wrap;       /* allow multiple rows */
+      justify-content: center; /* center the cards horizontally */
+      gap: 20px;             /* spacing between cards */
       margin-top: 20px;
-      justify-content: center;
     }
 
-    /* Updated card style */
+    /* Card style */
     .plant-card {
-      width: 180px;               /* fixed width for all cards */
+      width: 180px;               
       border: 1px solid #ccc;
       padding: 10px;
       text-align: center;
@@ -24,7 +24,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 10px;                  /* spacing between image and text */
+      gap: 10px;
       transition: transform 0.2s;
     }
 
@@ -32,11 +32,10 @@
       transform: translateY(-3px);
     }
 
-    /* Updated image style */
     .plant-card img {
-      width: 100%;                /* fit card width */
-      height: 120px;              /* fixed height */
-      object-fit: cover;          /* maintain aspect ratio, crop if needed */
+      width: 100%;               
+      height: 120px;             
+      object-fit: cover;          
       border-radius: 5px;
     }
 
@@ -53,10 +52,6 @@
 
   <div id="plant-list">Loading plants...</div>
 
-  <!-- Plant gallery -->
-  <h2>Plant Gallery</h2>
-  <div id="plant-gallery">Loading images...</div>
-
   <!-- Supabase client -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 
@@ -65,35 +60,6 @@
 
   <!-- Your app logic -->
   <script src="app.js"></script>
-
-  <script>
-    // Dynamically load plant images
-    async function loadPlantImages() {
-      const { data: plants, error } = await supabase
-        .from('plants') // replace with your actual table name
-        .select('*');
-
-      if (error) {
-        console.error('Error loading plants:', error);
-        return;
-      }
-
-      const gallery = document.getElementById('plant-gallery');
-      gallery.innerHTML = ''; // clear "Loading images..."
-
-      plants.forEach(plant => {
-        const card = document.createElement('div');
-        card.className = 'plant-card';
-        card.innerHTML = `
-          <img src="${plant.image_url}" alt="${plant.name}">
-          <h3>${plant.name}</h3>
-        `;
-        gallery.appendChild(card);
-      });
-    }
-
-    loadPlantImages();
-  </script>
 
 </body>
 </html>
