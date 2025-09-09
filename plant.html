@@ -76,15 +76,39 @@
       color: #2e7d32; /* green like plant icon */
       margin-top: 5px;
     }
+
+    /* ✅ Main Page button */
+    .main-page-btn {
+      display: inline-block;
+      margin: 10px auto 20px auto;
+      padding: 8px 16px;
+      background: #2e7d32;
+      color: white;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+    .main-page-btn:hover {
+      background: #1b5e20;
+    }
+    .main-page-container {
+      text-align: center;
+    }
   </style>
 </head>
 <body>
-  <!-- ✅ Added header section -->
+  <!-- ✅ Header section (already there) -->
   <header class="page-header">
     <h1 class="main-title">HKBK College Of Engineering</h1>
     <h2 class="sub-title">Department of AIML</h2>
     <h3 class="project-title">🌱 Campus Plant Information Management System</h3>
   </header>
+
+  <!-- ✅ Main Page button -->
+  <div class="main-page-container">
+    <a href="index.html" class="main-page-btn">🏠 Main Page</a>
+  </div>
 
   <div class="plant-container" id="plant-card">
     Loading plant details...
@@ -96,4 +120,3 @@
   <script src="plant.js"></script>
 </body>
 </html>
-
