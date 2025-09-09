@@ -65,6 +65,23 @@
       margin: 5px 0;
       color: #27ae60;
     }
+
+    /* ✅ Credits footer */
+    .credits {
+      text-align: center;
+      font-family: "Times New Roman", Times, serif;
+      font-size: 13px;
+      color: #555;
+      margin: 30px 15px 10px 15px;
+      line-height: 1.4;
+    }
+
+    @media (max-width: 768px) {
+      .credits {
+        font-size: 12px;
+        margin: 20px 10px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -77,6 +94,12 @@
   </div>
 
   <div id="plant-list">Loading plants...</div>
+
+  <!-- ✅ Credits Section -->
+  <footer class="credits">
+    designed and developed by Kishan, Gowthami, Jaffer, Khushi from the Dept. of AIML  
+    under the guidance of Dr. Tabassum Ara, HoD and Prof. Bharath V, Dept. of AIML
+  </footer>
 
   <!-- Supabase client -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
