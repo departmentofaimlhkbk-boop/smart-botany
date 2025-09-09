@@ -38,37 +38,20 @@ header, footer {
   box-shadow: 0 4px 20px rgba(0,0,0,0.1);
 }
 
-/* ✅ Plant detail table fix */
-.plant-container table {
+table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 10px;
-  table-layout: fixed; /* Force equal column layout */
 }
 
-.plant-container th, 
-.plant-container td {
+th, td {
   border: 1px solid #ddd;
   padding: 8px;
-  text-align: left;
-  vertical-align: top;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-  white-space: normal; /* Allow wrapping */
 }
 
-.plant-container th {
+th {
   width: 30%;
   background: #f2f2f2;
-}
-
-/* ✅ Make tables responsive on mobile */
-@media (max-width: 768px) {
-  .plant-container table {
-    display: block;
-    overflow-x: auto;
-    white-space: normal;
-  }
 }
 
 .images img {
@@ -77,26 +60,4 @@ header, footer {
   border-radius: 8px;
   cursor: pointer;
 }
-
-/* ✅ New header styles for Plant Page */
-.page-header {
-  text-align: center;
-  margin: 20px auto 30px auto;
-}
-.main-title {
-  font-size: 28px;
-  font-weight: bold;
-  color: #222;
-}
-.sub-title {
-  font-size: 20px;
-  font-weight: 500;
-  color: #444;
-  margin-top: 5px;
-}
-.project-title {
-  font-size: 18px;
-  font-weight: normal;
-  color: #2e7d32; /* green like plant icon */
-  margin-top: 5px;
-}
+styles.css
