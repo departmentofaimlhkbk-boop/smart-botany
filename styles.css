@@ -42,16 +42,39 @@ table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 10px;
+  table-layout: fixed; /* ✅ Force equal columns */
 }
 
 th, td {
   border: 1px solid #ddd;
   padding: 8px;
+  text-align: left;
+  vertical-align: top;
+
+  /* ✅ Wrapping fixes */
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
+  max-width: 1px; /* ✅ forces wrapping instead of stretching */
 }
 
 th {
   width: 30%;
   background: #f2f2f2;
+}
+
+/* ✅ Make tables responsive on mobile */
+@media (max-width: 768px) {
+  table {
+    display: block;
+    overflow-x: auto;
+    white-space: normal;
+  }
+
+  th, td {
+    display: table-cell;
+    word-break: break-word;
+  }
 }
 
 .images img {
@@ -60,4 +83,3 @@ th {
   border-radius: 8px;
   cursor: pointer;
 }
-styles.css
