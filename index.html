@@ -3,72 +3,52 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Campus Plant Information Management System – HKBK Group of Institutions</title>
+  <title>Campus Plant Information Management System</title>
   <link rel="stylesheet" href="styles.css">
   <style>
-    /* Optional basic styles */
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 16px;
-      margin-top: 20px;
-    }
-    .card {
-      background: white;
-      padding: 12px;
-      border-radius: 12px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    /* ✅ Header styles copied from plant page */
+    .page-header {
       text-align: center;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      margin: 20px auto 30px auto;
     }
-    .card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    .main-title {
+      font-size: 28px;
+      font-weight: bold;
+      color: #222;
     }
-    .card img {
-      max-width: 100%;
-      border-radius: 8px;
+    .sub-title {
+      font-size: 20px;
+      font-weight: 500;
+      color: #444;
+      margin-top: 5px;
+    }
+    .project-title {
+      font-size: 18px;
+      font-weight: normal;
+      color: #2e7d32; /* green */
+      margin-top: 5px;
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1> 🌱 Campus Plant Information Management System – HKBK Group of Institutions</h1>
+
+  <!-- ✅ New header section -->
+  <header class="page-header">
+    <h1 class="main-title">HKBK College Of Engineering</h1>
+    <h2 class="sub-title">Department of AIML</h2>
+    <h3 class="project-title">🌱 Campus Plant Information Management System</h3>
   </header>
 
-  <main>
-    
+  <!-- ✅ Directly showing plant list without extra sentence -->
+  <div id="plant-list"></div>
 
-    <!-- Plant list container -->
-    <div id="plant-list" class="grid">Loading plants...</div>
+  <footer class="site-footer">
+    <p><strong>This project has been developed under the vision and guidance of Dr. Tabassum Ara, Professor and Head, Department of AIML. The development team comprises Jaffer Hameed (1HK23AI017), Kishan Kumar C (1HK23AI021), Gowthami N (1HK23AI010), and Khushi M (1HK23AI020), students of 5th Semester, Department of AIML, HKBK College of Engineering</strong></p>
+    <p class="small-text">&copy; 2025 Smart Campus Project</p>
+  </footer>
 
-    <!-- Error container for debug -->
-    <div id="error-message" style="color:red; text-align:center; margin-top:10px;"></div>
-  </main>
-
- <footer class="site-footer">
-  <p>
-    <strong>
-      This project has been developed under the vision and guidance of 
-      <em>Dr. Tabassum Ara</em>, Professor and Head, Department of AIML. 
-      The development team comprises 
-      <em>Jaffer Hameed (1HK23AI017)</em>, 
-      <em>Kishan Kumar C (1HK23AI021)</em>, 
-      <em>Gowthami N (1HK23AI010)</em>, and 
-      <em>Khushi M (1HK23AI020)</em>, 
-      students of 5th Semester, Department of AIML, 
-      <strong>HKBK College of Engineering</strong>.
-    </strong>
-  </p>
-  <p class="small-text">&copy; 2025 Smart Campus Project</p>
-</footer>
-
-
-  <!-- Scripts: Supabase first, then config.js, then app.js -->
- <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-<script src="config.js"></script>
-<script src="app.js"></script>
-
-
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <script src="config.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
