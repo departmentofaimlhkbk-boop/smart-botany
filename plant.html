@@ -19,16 +19,25 @@
       box-shadow: 0 4px 20px rgba(0,0,0,0.1);
       max-width: 900px;
       margin: 40px auto;
-      position: relative; /* ✅ allows absolute logo positioning */
     }
 
-    /* ✅ Logo top-left */
-    .plant-logo {
+    /* ✅ Logo + Plant name row */
+    .logo-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+    .college-logo {
       width: 70px;
       height: auto;
-      position: absolute;
-      top: 15px;
-      left: 15px;
+    }
+    #plant-name {
+      font-size: 26px;
+      font-weight: bold;
+      color: #222;
+      margin: 0;
     }
 
     .plant-table {
@@ -135,10 +144,13 @@
     <a href="index.html" class="main-page-btn">🏠 Main Page</a>
   </div>
 
-  <!-- ✅ Plant details container with top-left logo -->
-  <div class="plant-container" id="plant-card">
-    <img src="college-image.png" alt="College Logo" class="plant-logo">
-    Loading plant details...
+  <!-- ✅ Plant details container -->
+  <div class="plant-container">
+    <div class="logo-header">
+      <img src="college-image.png" alt="College Logo" class="college-logo">
+      <h2 id="plant-name">Loading...</h2>
+    </div>
+    <div id="plant-details">Loading plant details...</div>
   </div>
 
   <!-- ✅ Credits Section -->
