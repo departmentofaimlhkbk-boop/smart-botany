@@ -19,22 +19,22 @@
       box-shadow: 0 4px 20px rgba(0,0,0,0.1);
       max-width: 900px;
       margin: 40px auto;
-      text-align: center; /* ✅ Center content inside */
+      position: relative; /* ✅ allows absolute logo positioning */
     }
 
-    /* ✅ Logo inside plant-container */
+    /* ✅ Logo top-left */
     .plant-logo {
-      width: 80px;
+      width: 70px;
       height: auto;
-      margin-bottom: 15px;
-      display: block;
-      margin-left: auto;
-      margin-right: auto;
+      position: absolute;
+      top: 15px;
+      left: 15px;
     }
 
     .plant-table {
       width: 100%;
       border-collapse: collapse;
+      margin-top: 20px;
     }
     .plant-table th, .plant-table td {
       border: 1px solid #ddd;
@@ -135,7 +135,7 @@
     <a href="index.html" class="main-page-btn">🏠 Main Page</a>
   </div>
 
-  <!-- ✅ Plant details container with logo -->
+  <!-- ✅ Plant details container with top-left logo -->
   <div class="plant-container" id="plant-card">
     <img src="college-image.png" alt="College Logo" class="plant-logo">
     Loading plant details...
