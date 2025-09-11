@@ -71,7 +71,7 @@ async function loadPlantDetails() {
         <tr><th>Seasonal Flowering</th><td>${plant.seasonal_flowering || "-"}</td></tr>
         <tr><th>Medicinal Value</th><td>${plant.medicinal_value || "-"}</td></tr>
         <tr><th>Quantitative Data</th><td>${plant.quantitative_data || "-"}</td></tr>
-        <tr><th>Location</th><td>${plant.location || "-"}</td></tr>
+        <tr><th>Geo Location</th><td>${plant.geo_location || "-"}</td></tr>
         <tr><th>Additional Info</th><td>${additionalInfo}</td></tr>
         <tr><th>Images</th><td>${imagesHTML}</td></tr>
       </table>
