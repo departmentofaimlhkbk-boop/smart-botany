@@ -7,9 +7,9 @@
     /* Homepage plant list layout */
     #plant-list {
       display: flex;
-      flex-wrap: wrap;       
-      justify-content: center; 
-      gap: 20px;             
+      flex-wrap: wrap;       /* allow multiple rows */
+      justify-content: center; /* center the cards horizontally */
+      gap: 20px;             /* spacing between cards */
       margin-top: 20px;
     }
 
@@ -49,7 +49,6 @@
     #homepage-titles {
       text-align: center;
       margin-bottom: 30px;
-      position: relative; /* For absolute positioning of search bar */
     }
 
     /* ✅ Logo + title flexbox */
@@ -57,7 +56,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 15px; 
+      gap: 15px; /* space between logo and text */
       margin-bottom: 10px;
     }
 
@@ -71,34 +70,11 @@
       margin: 0;
       color: #2c3e50;
     }
-
+    /* Removed h2 styling since it's not used */
     #homepage-titles h3 {
       font-size: 20px;
       margin: 5px 0;
       color: #27ae60;
-    }
-
-    /* ✅ Search bar */
-    .search-container {
-      position: absolute;
-      top: 0;
-      right: 0;
-      margin: 15px;
-    }
-
-    #plant-search {
-      padding: 6px 10px;
-      border-radius: 20px;
-      border: 1px solid #ccc;
-      font-size: 14px;
-      width: 180px;
-      transition: all 0.2s ease-in-out;
-    }
-
-    #plant-search:focus {
-      outline: none;
-      border-color: #2e7d32;
-      box-shadow: 0 0 5px rgba(46, 125, 50, 0.5);
     }
 
     /* ✅ Credits footer */
@@ -116,9 +92,6 @@
         font-size: 12px;
         margin: 20px 10px;
       }
-      #plant-search {
-        width: 140px;
-      }
     }
   </style>
 </head>
@@ -130,14 +103,10 @@
       <img src="college-image.png" alt="College Logo" class="college-logo">
       <div>
         <h1>HKBK College Of Engineering</h1>
+        <!-- Department of AIML removed from homepage -->
       </div>
     </div>
     <h3>🌱 Campus Plant Information Management System</h3>
-
-    <!-- ✅ Search bar -->
-    <div class="search-container">
-      <input type="text" id="plant-search" placeholder="Search plants..." />
-    </div>
   </div>
 
   <div id="plant-list">Loading plants...</div>
@@ -156,24 +125,6 @@
 
   <!-- Your app logic -->
   <script src="app.js"></script>
-
-  <!-- ✅ Search filter JS -->
-  <script>
-    const searchInput = document.getElementById("plant-search");
-    searchInput.addEventListener("input", function() {
-      const filter = searchInput.value.toLowerCase();
-      const plants = document.querySelectorAll("#plant-list .plant-card");
-
-      plants.forEach(plant => {
-        const name = plant.querySelector("h3").innerText.toLowerCase();
-        if (name.includes(filter)) {
-          plant.style.display = "";
-        } else {
-          plant.style.display = "none";
-        }
-      });
-    });
-  </script>
 
 </body>
 </html>
