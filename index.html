@@ -50,6 +50,21 @@
       text-align: center;
       margin-bottom: 30px;
     }
+
+    /* ✅ Logo + title flexbox */
+    .logo-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px; /* space between logo and text */
+      margin-bottom: 10px;
+    }
+
+    .college-logo {
+      width: 70px;
+      height: auto;
+    }
+
     #homepage-titles h1 {
       font-size: 36px;
       margin: 0;
@@ -86,10 +101,15 @@
 </head>
 <body>
 
-  <!-- Updated Homepage Titles -->
+  <!-- ✅ Updated Homepage Titles with Logo -->
   <div id="homepage-titles">
-    <h1>HKBK College Of Engineering</h1>
-    <h2>Department of AIML</h2>
+    <div class="logo-header">
+      <img src="college-image.png" alt="College Logo" class="college-logo">
+      <div>
+        <h1>HKBK College Of Engineering</h1>
+        <h2>Department of AIML</h2>
+      </div>
+    </div>
     <h3>🌱 Campus Plant Information Management System</h3>
   </div>
 
