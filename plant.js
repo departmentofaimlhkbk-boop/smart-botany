@@ -59,12 +59,30 @@ async function loadPlantDetails() {
         )
       : "-";
 
-    // Populate HTML
+    // Calculate Age dynamically
+    let ageText = "-";
+    if (plant.date_of_planting) {
+      const planted = new Date(plant.date_of_planting);
+      const today = new Date();
+
+      let age = today.getFullYear() - planted.getFullYear();
+      const monthDiff = today.getMonth() - planted.getMonth();
+      const dayDiff = today.getDate() - planted.getDate();
+
+      if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
+        age--;
+      }
+
+      ageText = age + " years";
+    }
+
+    // Populate HTML with Age row after Date of Planting
     container.innerHTML = `
       <h2>${plant.common_name || "-"} (${plant.scientific_name || "-"})</h2>
-      <table>
+      <table class="plant-table">
         <tr><th>Category</th><td>${plant.category || "-"}</td></tr>
         <tr><th>Date of Planting</th><td>${plant.date_of_planting || "-"}</td></tr>
+        <tr><th>Age</th><td id="plant-age">${ageText}</td></tr>
         <tr><th>Max Height</th><td>${plant.max_height || "-"}</td></tr>
         <tr><th>Origin</th><td>${plant.origin || "-"}</td></tr>
         <tr><th>Water Requirement</th><td>${plant.water_requirement || "-"}</td></tr>
