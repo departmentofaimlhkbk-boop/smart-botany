@@ -1,38 +1,85 @@
-/* ================= Search bar styling ================= */
-.search-container {
-  position: absolute; /* top-right on desktop */
-  top: 20px;
-  right: 20px;
-  z-index: 10;
+body {
+  font-family: Arial, sans-serif;
+  background: #f9f9f9;
+  padding: 20px;
 }
 
-#plant-search {
-  padding: 6px 10px;
-  border-radius: 20px;
-  border: 1px solid #ccc;
-  font-size: 14px;
-  width: 180px;
-  transition: all 0.2s ease-in-out;
+header, footer {
+  text-align: center;
+  margin-bottom: 20px;
 }
 
-#plant-search:focus {
-  outline: none;
-  border-color: #2e7d32;
-  box-shadow: 0 0 5px rgba(46, 125, 50, 0.5);
+.card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(2,8,23,.08);
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+  padding: 10px;
+  margin: 10px;
+  width: 200px;
+  display: inline-block;
+  vertical-align: top;
+  text-align: center;
 }
 
-/* Responsive: move search below title on small screens */
+.card img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+}
+
+.plant-container {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  max-width: 900px;
+  margin: auto;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+/* ✅ Plant details table */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  table-layout: fixed; /* keeps columns consistent */
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+  vertical-align: top;
+
+  /* ✅ Wrapping fixes */
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
+}
+
+th {
+  width: 30%;
+  min-width: 120px; /* ✅ prevents breaking into single letters */
+  background: #f2f2f2;
+}
+
+/* ✅ Responsive table for small screens */
 @media (max-width: 768px) {
-  .search-container {
-    position: relative; /* remove absolute */
-    top: auto;
-    right: auto;
-    margin: 10px auto 20px auto; /* spacing below title */
-    text-align: center;
+  table {
+    display: block;
+    overflow-x: auto; /* scroll horizontally if needed */
   }
 
-  #plant-search {
-    width: 90%;       /* almost full width */
-    max-width: 250px; /* prevent being too wide */
+  th, td {
+    display: table-cell;
+    word-break: break-word;
   }
+}
+
+.images img {
+  width: 150px;
+  margin: 5px;
+  border-radius: 8px;
+  cursor: pointer;
 }
