@@ -48,7 +48,7 @@
     /* Homepage Titles */
     #homepage-titles {
       text-align: center;
-      margin-bottom: 30px;
+      margin-bottom: 20px;
     }
 
     /* ✅ Logo + title flexbox */
@@ -70,11 +70,33 @@
       margin: 0;
       color: #2c3e50;
     }
-    /* Removed h2 styling since it's not used */
+
     #homepage-titles h3 {
       font-size: 20px;
       margin: 5px 0;
       color: #27ae60;
+    }
+
+    /* ✅ Search Bar Styling */
+    #search-container {
+      text-align: center;
+      margin: 15px 0 25px 0;
+    }
+
+    #search-bar {
+      width: 90%;
+      max-width: 400px;
+      padding: 10px 15px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      outline: none;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+      transition: border 0.2s ease-in-out;
+    }
+
+    #search-bar:focus {
+      border: 1px solid #27ae60;
     }
 
     /* ✅ Credits footer */
@@ -103,10 +125,14 @@
       <img src="college-image.png" alt="College Logo" class="college-logo">
       <div>
         <h1>HKBK College Of Engineering</h1>
-        <!-- Department of AIML removed from homepage -->
       </div>
     </div>
     <h3>🌱 Campus Plant Information Management System</h3>
+  </div>
+
+  <!-- ✅ Search Bar -->
+  <div id="search-container">
+    <input type="text" id="search-bar" placeholder="Search plant by name...">
   </div>
 
   <div id="plant-list">Loading plants...</div>
@@ -124,6 +150,26 @@
 
   <!-- Your app logic -->
   <script src="app.js"></script>
+
+  <!-- ✅ Search Logic -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const searchBar = document.getElementById("search-bar");
+      const plantList = document.getElementById("plant-list");
+
+      if (searchBar) {
+        searchBar.addEventListener("keyup", () => {
+          const query = searchBar.value.toLowerCase();
+          const cards = plantList.querySelectorAll(".plant-card");
+
+          cards.forEach(card => {
+            const name = card.textContent.toLowerCase();
+            card.style.display = name.includes(query) ? "flex" : "none";
+          });
+        });
+      }
+    });
+  </script>
 
 </body>
 </html>
