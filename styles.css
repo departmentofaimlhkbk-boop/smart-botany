@@ -9,6 +9,15 @@ header, footer {
   margin-bottom: 20px;
 }
 
+/* ✅ Plant list grid */
+#plant-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  justify-content: center;
+}
+
+/* ✅ Card style */
 .card {
   background: white;
   border-radius: 12px;
@@ -16,11 +25,13 @@ header, footer {
   overflow: hidden;
   border: 1px solid #e2e8f0;
   padding: 10px;
-  margin: 10px;
-  width: 200px;
-  display: inline-block;
-  vertical-align: top;
   text-align: center;
+  transition: transform 0.2s ease-in-out;
+}
+
+/* Small hover effect (optional) */
+.card:hover {
+  transform: translateY(-5px);
 }
 
 .card img {
