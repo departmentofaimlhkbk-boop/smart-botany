@@ -29,7 +29,6 @@ header, footer {
   transition: transform 0.2s ease-in-out;
 }
 
-/* Small hover effect (optional) */
 .card:hover {
   transform: translateY(-5px);
 }
@@ -75,11 +74,12 @@ th {
   background: #f2f2f2;
 }
 
-/* ✅ Responsive table for small screens */
+/* ✅ Responsive adjustments */
 @media (max-width: 768px) {
+  /* keep table scrollable */
   table {
     display: block;
-    overflow-x: auto; /* scroll horizontally if needed */
+    overflow-x: auto;
   }
 
   th, td {
@@ -87,16 +87,16 @@ th {
     word-break: break-word;
   }
 
-  /* ✅ Force 2 cards per row on tablets/phones */
+  /* ✅ Force exactly 2 cards per row */
   #plant-list {
-    grid-template-columns: repeat(2, 1fr) !important;
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
-/* ✅ Extra small screens: 1 card per row */
 @media (max-width: 480px) {
+  /* ✅ For very small screens: 1 card per row */
   #plant-list {
-    grid-template-columns: 1fr !important;
+    grid-template-columns: 1fr;
   }
 }
 
