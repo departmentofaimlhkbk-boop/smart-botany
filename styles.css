@@ -106,3 +106,20 @@ th {
   border-radius: 8px;
   cursor: pointer;
 }
+
+.banner {
+  background: url("im.png") no-repeat center center;
+  background-size: cover;
+  padding: 40px 20px;
+  text-align: center;
+  color: white; /* text readable on image */
+}
+
+.banner h2, 
+.banner h3 {
+  color: white; /* override default black text */
+}
+
+.banner .home-btn {
+  margin-top: 15px;
+}
