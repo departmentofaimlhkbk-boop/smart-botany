@@ -88,7 +88,7 @@ async function loadPlantDetails() {
       ? `I can grow up to ${plant.max_height}.`
       : "My height is still a surprise!";
     const originText = plant.origin
-      ? `My roots trace back to ${plant.origin}.`
+      ? `Originally from ${plant.origin}, I now call this campus my home.`
       : "My origin is a mystery.";
     const waterText = plant.water_requirement
       ? `I thrive best with ${plant.water_requirement}.`
