@@ -78,7 +78,7 @@ async function loadPlantDetails() {
 
     // Populate HTML with Age row after Date of Planting
     container.innerHTML = `
-      <h2>${"Hi! I am " || plant.common_name || "-"} (${plant.scientific_name || "-"})</h2>
+      <h2>${plant.common_name || "-"} (${plant.scientific_name || "-"})</h2>
       <table class="plant-table">
         <tr><th>Category</th><td>${plant.category || "-"}</td></tr>
         <tr><th>Date of Planting</th><td>${plant.date_of_planting || "-"}</td></tr>
