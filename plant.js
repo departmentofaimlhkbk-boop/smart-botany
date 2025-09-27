@@ -106,7 +106,7 @@ async function loadPlantDetails() {
       ? `You can find me at: ${plant.geo_location}.`
       : "My exact location is not shared.";
 
-    // Populate HTML with conversational style inside table
+    // Populate HTML
     container.innerHTML = `
       <h2>${nameText}</h2>
       <table class="plant-table">
@@ -124,9 +124,40 @@ async function loadPlantDetails() {
         <tr><th>Images</th><td>${imagesHTML}</td></tr>
       </table>
     `;
+
+    // 🔊 Auto-speak after page loads
+    autoSpeakTable();
+
   } catch (err) {
     console.error("Unexpected error:", err);
     container.innerHTML = "<p>❌ Something went wrong while loading plant.</p>";
+  }
+}
+
+// Function for speaking only right column values
+function autoSpeakTable() {
+  const synth = window.speechSynthesis;
+  synth.cancel(); // stop previous speech if running
+
+  const table = document.querySelector(".plant-table");
+  if (!table) return;
+
+  const rows = table.querySelectorAll("tr");
+  let values = [];
+
+  rows.forEach(row => {
+    const cells = row.querySelectorAll("td");
+    if (cells.length === 2) {
+      values.push(cells[1].innerText.trim()); // only right column
+    }
+  });
+
+  const textToSpeak = values.join(". ");
+  if (textToSpeak) {
+    const utterance = new SpeechSynthesisUtterance(textToSpeak);
+    utterance.lang = "en-IN";  // Indian English
+    utterance.rate = 1;        // normal speed
+    synth.speak(utterance);
   }
 }
 
