@@ -1,4 +1,4 @@
-// plant.js - load plant details dynamically by ID & auto-speak
+// plant.js - load plant details dynamically by ID & add Speak button
 
 async function loadPlantDetails() {
   const params = new URLSearchParams(window.location.search);
@@ -106,9 +106,10 @@ async function loadPlantDetails() {
       ? `You can find me at: ${plant.geo_location}.`
       : "My exact location is not shared.";
 
-    // Populate HTML with conversational style inside table
+    // Populate HTML with conversational style inside table + Speak button
     container.innerHTML = `
       <h2>${nameText}</h2>
+      <button id="speak-btn" style="margin-bottom:15px; padding:8px 12px; cursor:pointer;">🔊 Speak</button>
       <table class="plant-table">
         <tr><th>Category</th><td>${categoryText}</td></tr>
         <tr><th>Date of Planting</th><td>${dateText}</td></tr>
@@ -125,47 +126,33 @@ async function loadPlantDetails() {
       </table>
     `;
 
-    // Initialize auto-speak after table is loaded
-    autoSpeakTable();
+    // Add Speak button functionality
+    const speakBtn = document.getElementById("speak-btn");
+    speakBtn.addEventListener("click", () => {
+      const table = document.querySelector(".plant-table");
+      if (!table) return;
+
+      const rows = table.querySelectorAll("tr");
+      let values = [];
+      rows.forEach(row => {
+        const cells = row.querySelectorAll("td");
+        if (cells.length === 2) values.push(cells[1].innerText.trim());
+      });
+
+      const textToSpeak = values.join(". ");
+      if (textToSpeak) {
+        const utterance = new SpeechSynthesisUtterance(textToSpeak);
+        utterance.lang = "en-IN";
+        utterance.rate = 1;
+        window.speechSynthesis.cancel();
+        window.speechSynthesis.speak(utterance);
+      }
+    });
 
   } catch (err) {
     console.error("Unexpected error:", err);
     container.innerHTML = "<p>❌ Something went wrong while loading plant.</p>";
   }
-}
-
-// Function to auto speak plant table
-function autoSpeakTable() {
-  const overlay = document.getElementById("voice-overlay");
-  if (!overlay) return;
-
-  overlay.addEventListener("click", () => {
-    overlay.style.display = "none"; // hide overlay after tap
-
-    const synth = window.speechSynthesis;
-    synth.cancel();
-
-    const table = document.querySelector(".plant-table");
-    if (!table) return;
-
-    const rows = table.querySelectorAll("tr");
-    let values = [];
-
-    rows.forEach(row => {
-      const cells = row.querySelectorAll("td");
-      if (cells.length === 2) {
-        values.push(cells[1].innerText.trim());
-      }
-    });
-
-    const textToSpeak = values.join(". ");
-    if (textToSpeak) {
-      const utterance = new SpeechSynthesisUtterance(textToSpeak);
-      utterance.lang = "en-IN";  // Indian English
-      utterance.rate = 1;        // normal speed
-      synth.speak(utterance);
-    }
-  });
 }
 
 // Run after page load
