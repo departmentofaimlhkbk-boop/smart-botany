@@ -1,4 +1,4 @@
-// plant.js - load plant details dynamically by ID & add Speak button
+// plant.js - load plant details dynamically by ID & add mobile-friendly Speak button
 
 async function loadPlantDetails() {
   const params = new URLSearchParams(window.location.search);
@@ -126,27 +126,29 @@ async function loadPlantDetails() {
       </table>
     `;
 
-    // Add Speak button functionality
+    // Mobile-friendly Speak button functionality
     const speakBtn = document.getElementById("speak-btn");
     speakBtn.addEventListener("click", () => {
-      const table = document.querySelector(".plant-table");
-      if (!table) return;
+      setTimeout(() => { // ensures mobile treats it as user gesture
+        const table = document.querySelector(".plant-table");
+        if (!table) return;
 
-      const rows = table.querySelectorAll("tr");
-      let values = [];
-      rows.forEach(row => {
-        const cells = row.querySelectorAll("td");
-        if (cells.length === 2) values.push(cells[1].innerText.trim());
-      });
+        const rows = table.querySelectorAll("tr");
+        let values = [];
+        rows.forEach(row => {
+          const cells = row.querySelectorAll("td");
+          if (cells.length === 2) values.push(cells[1].innerText.trim());
+        });
 
-      const textToSpeak = values.join(". ");
-      if (textToSpeak) {
-        const utterance = new SpeechSynthesisUtterance(textToSpeak);
-        utterance.lang = "en-IN";
-        utterance.rate = 1;
-        window.speechSynthesis.cancel();
-        window.speechSynthesis.speak(utterance);
-      }
+        const textToSpeak = values.join(". ");
+        if (textToSpeak) {
+          const utterance = new SpeechSynthesisUtterance(textToSpeak);
+          utterance.lang = "en-IN";
+          utterance.rate = 1;
+          window.speechSynthesis.cancel();
+          window.speechSynthesis.speak(utterance);
+        }
+      }, 0); 
     });
 
   } catch (err) {
