@@ -1,4 +1,4 @@
-// plant.js - load plant details dynamically by ID & add mobile-friendly Speak button
+// plant.js - load plant details dynamically by ID & mobile-friendly Speak button
 
 async function loadPlantDetails() {
   const params = new URLSearchParams(window.location.search);
@@ -51,7 +51,7 @@ async function loadPlantDetails() {
         .join("");
     }
 
-    // Make links clickable in Additional Info
+    // Additional Info links
     const additionalInfo = plant.additional_info
       ? `Did you know? ${plant.additional_info.replace(
           /(https?:\/\/[^\s]+)/g,
@@ -59,54 +59,31 @@ async function loadPlantDetails() {
         )}`
       : "I have no extra stories to share right now 🌱.";
 
-    // Calculate Age dynamically
+    // Calculate Age
     let ageText = "My age is a little secret 🤫.";
     if (plant.date_of_planting) {
       const planted = new Date(plant.date_of_planting);
       const today = new Date();
-
       let age = today.getFullYear() - planted.getFullYear();
       const monthDiff = today.getMonth() - planted.getMonth();
       const dayDiff = today.getDate() - planted.getDate();
-
-      if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
-        age--;
-      }
-
+      if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) age--;
       ageText = `I am around ${age} years old.`;
     }
 
     // Conversational replacements
     const nameText = `Hi! I’m ${plant.common_name || "a plant"}, flourishing at HKBK 🌿. My scientific name is ${plant.scientific_name || "-"}.`;
-    const categoryText = plant.category
-      ? `I belong to the ${plant.category} category.`
-      : "I’m still discovering my category.";
-    const dateText = plant.date_of_planting
-      ? `I was planted on ${plant.date_of_planting}.`
-      : "I don't remember the exact date I was planted, but I’ve been growing happily here 🌱.";
-    const heightText = plant.max_height
-      ? `I can grow up to ${plant.max_height}.`
-      : "My height is still a surprise!";
-    const originText = plant.origin
-      ? `Originally from ${plant.origin}, I now call this campus my home.`
-      : "My origin is a mystery.";
-    const waterText = plant.water_requirement
-      ? `I thrive best with ${plant.water_requirement}.`
-      : "I’m not too picky about water.";
-    const flowerText = plant.seasonal_flowering
-      ? `I bloom during ${plant.seasonal_flowering}.`
-      : "I may surprise you with my flowers!";
-    const medText = plant.medicinal_value
-      ? `People value me for: ${plant.medicinal_value}.`
-      : "I don’t have known medicinal uses.";
-    const dataText = plant.quantitative_data
-      ? `Fun fact: ${plant.quantitative_data}.`
-      : "No extra data about me yet.";
-    const geoText = plant.geo_location
-      ? `You can find me at: ${plant.geo_location}.`
-      : "My exact location is not shared.";
+    const categoryText = plant.category ? `I belong to the ${plant.category} category.` : "I’m still discovering my category.";
+    const dateText = plant.date_of_planting ? `I was planted on ${plant.date_of_planting}.` : "I don't remember the exact date I was planted, but I’ve been growing happily here 🌱.";
+    const heightText = plant.max_height ? `I can grow up to ${plant.max_height}.` : "My height is still a surprise!";
+    const originText = plant.origin ? `Originally from ${plant.origin}, I now call this campus my home.` : "My origin is a mystery.";
+    const waterText = plant.water_requirement ? `I thrive best with ${plant.water_requirement}.` : "I’m not too picky about water.";
+    const flowerText = plant.seasonal_flowering ? `I bloom during ${plant.seasonal_flowering}.` : "I may surprise you with my flowers!";
+    const medText = plant.medicinal_value ? `People value me for: ${plant.medicinal_value}.` : "I don’t have known medicinal uses.";
+    const dataText = plant.quantitative_data ? `Fun fact: ${plant.quantitative_data}.` : "No extra data about me yet.";
+    const geoText = plant.geo_location ? `You can find me at: ${plant.geo_location}.` : "My exact location is not shared.";
 
-    // Populate HTML with conversational style inside table + Speak button
+    // Populate HTML with table + Speak button
     container.innerHTML = `
       <h2>${nameText}</h2>
       <button id="speak-btn" style="margin-bottom:15px; padding:8px 12px; cursor:pointer;">🔊 Speak</button>
@@ -126,29 +103,24 @@ async function loadPlantDetails() {
       </table>
     `;
 
-    // Mobile-friendly Speak button functionality
+    // ✅ Speak button - works on desktop + mobile
     const speakBtn = document.getElementById("speak-btn");
     speakBtn.addEventListener("click", () => {
-      setTimeout(() => { // ensures mobile treats it as user gesture
-        const table = document.querySelector(".plant-table");
-        if (!table) return;
+      const table = document.querySelector(".plant-table");
+      if (!table) return;
 
-        const rows = table.querySelectorAll("tr");
-        let values = [];
-        rows.forEach(row => {
-          const cells = row.querySelectorAll("td");
-          if (cells.length === 2) values.push(cells[1].innerText.trim());
-        });
+      let textToSpeak = "";
+      table.querySelectorAll("td").forEach(cell => {
+        textToSpeak += cell.innerText.trim() + ". ";
+      });
 
-        const textToSpeak = values.join(". ");
-        if (textToSpeak) {
-          const utterance = new SpeechSynthesisUtterance(textToSpeak);
-          utterance.lang = "en-IN";
-          utterance.rate = 1;
-          window.speechSynthesis.cancel();
-          window.speechSynthesis.speak(utterance);
-        }
-      }, 0); 
+      if (textToSpeak) {
+        const utterance = new SpeechSynthesisUtterance(textToSpeak);
+        utterance.lang = "en-IN";
+        utterance.rate = 1;
+        window.speechSynthesis.cancel(); // stop any previous speech
+        window.speechSynthesis.speak(utterance);
+      }
     });
 
   } catch (err) {
