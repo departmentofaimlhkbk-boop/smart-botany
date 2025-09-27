@@ -96,6 +96,26 @@
       text-align: center;
     }
 
+    /* ✅ Speech Controls */
+    .speech-controls {
+      text-align: center;
+      margin: 20px auto;
+    }
+    .speech-controls button {
+      margin: 5px;
+      padding: 8px 14px;
+      font-size: 14px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      background: #2e7d32;
+      color: white;
+      transition: background 0.3s;
+    }
+    .speech-controls button:hover {
+      background: #1b5e20;
+    }
+
     /* Credits footer */
     .credits {
       text-align: center;
@@ -131,6 +151,14 @@
     Loading plant details...
   </div>
 
+  <!-- ✅ Speech Controls -->
+  <div class="speech-controls">
+    <button onclick="speakPlantInfo()">🔊 Speak</button>
+    <button onclick="pauseSpeech()">⏸ Pause</button>
+    <button onclick="resumeSpeech()">▶ Resume</button>
+    <button onclick="stopSpeech()">⏹ Stop</button>
+  </div>
+
   <!-- Credits Section -->
   <footer class="credits">
    Designed and developed by Jaffer H, Kishan K, Gowthami N, and Khushi M under the guidance of Dr Tabassum Ara-Hod & Prof. and Prof. Bharath V-Asst. Prof., Dept. of AIML
@@ -140,7 +168,5 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
   <script src="config.js"></script>
   <script src="plant.js"></script>
-
-  <!-- ✅ Removed auto-speech script to fix mobile & desktop -->
 </body>
 </html>
