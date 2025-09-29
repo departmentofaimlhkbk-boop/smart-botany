@@ -1,39 +1,5 @@
-// plant.js - load plant details, mobile-friendly Speak button, and update view count
+// plant.js - load plant details dynamically by ID & mobile-friendly Speak button
 
-// ✅ Update views when plant page is opened
-async function updateViewCount(plantId) {
-  try {
-    // 1. Get current views
-    let { data, error } = await supabase
-      .from("views")
-      .select("count")
-      .eq("plant_id", plantId)
-      .single();
-
-    if (error && error.code !== "PGRST116") throw error;
-
-    let currentCount = data ? data.count : 0;
-    let newCount = currentCount + 1;
-
-    if (data) {
-      // 2. Update existing row
-      await supabase.from("views").update({ count: newCount }).eq("plant_id", plantId);
-    } else {
-      // 3. Insert if first view
-      await supabase.from("views").insert([{ plant_id: plantId, count: 1 }]);
-    }
-
-    // 4. Update UI
-    const counterElem = document.getElementById("viewer-counter");
-    if (counterElem) counterElem.innerText = `👀 Views: ${newCount}`;
-  } catch (err) {
-    console.error("View counter error:", err.message);
-    const counterElem = document.getElementById("viewer-counter");
-    if (counterElem) counterElem.innerText = "👀 Views: Error loading";
-  }
-}
-
-// ✅ Load plant details
 async function loadPlantDetails() {
   const params = new URLSearchParams(window.location.search);
   const plantId = params.get("id");
@@ -70,9 +36,6 @@ async function loadPlantDetails() {
     }
 
     console.log("Fetched plant:", plant);
-
-    // Update view count
-    updateViewCount(plantId);
 
     // Multiple images with Lightbox
     let imagesHTML = "-";
@@ -120,10 +83,9 @@ async function loadPlantDetails() {
     const dataText = plant.quantitative_data ? `Fun fact: ${plant.quantitative_data}.` : "No extra data about me yet.";
     const geoText = plant.geo_location ? `You can find me at: ${plant.geo_location}.` : "My exact location is not shared.";
 
-    // Populate HTML with table + Speak button + view counter
+    // Populate HTML with table + Speak button
     container.innerHTML = `
       <h2>${nameText}</h2>
-      <div id="viewer-counter" style="margin-bottom:10px;">👀 Views: Loading...</div>
       <button id="speak-btn" style="margin-bottom:15px; padding:8px 12px; cursor:pointer;">🔊 Speak</button>
       <table class="plant-table">
         <tr><th>Category</th><td>${categoryText}</td></tr>
@@ -156,7 +118,7 @@ async function loadPlantDetails() {
         const utterance = new SpeechSynthesisUtterance(textToSpeak);
         utterance.lang = "en-IN";
         utterance.rate = 1;
-        window.speechSynthesis.cancel();
+        window.speechSynthesis.cancel(); // stop any previous speech
         window.speechSynthesis.speak(utterance);
       }
     });
