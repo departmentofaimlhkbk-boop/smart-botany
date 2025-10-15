@@ -1,4 +1,4 @@
-// plant.js - load plant details dynamically by ID & mobile-friendly Speak button
+// plant.js - load plant details dynamically by ID & mobile-friendly Speak/Stop button
 
 async function loadPlantDetails() {
   const params = new URLSearchParams(window.location.search);
@@ -103,23 +103,40 @@ async function loadPlantDetails() {
       </table>
     `;
 
-    // ✅ Speak button - works on desktop + mobile
+    // ✅ Speak / Stop Toggle Logic
     const speakBtn = document.getElementById("speak-btn");
+    let isSpeaking = false;
+    let utterance;
+
     speakBtn.addEventListener("click", () => {
-      const table = document.querySelector(".plant-table");
-      if (!table) return;
+      if (!isSpeaking) {
+        const table = document.querySelector(".plant-table");
+        if (!table) return;
 
-      let textToSpeak = "";
-      table.querySelectorAll("td").forEach(cell => {
-        textToSpeak += cell.innerText.trim() + ". ";
-      });
+        let textToSpeak = "";
+        table.querySelectorAll("td").forEach(cell => {
+          textToSpeak += cell.innerText.trim() + ". ";
+        });
 
-      if (textToSpeak) {
-        const utterance = new SpeechSynthesisUtterance(textToSpeak);
-        utterance.lang = "en-IN";
-        utterance.rate = 1;
-        window.speechSynthesis.cancel(); // stop any previous speech
-        window.speechSynthesis.speak(utterance);
+        if (textToSpeak) {
+          utterance = new SpeechSynthesisUtterance(textToSpeak);
+          utterance.lang = "en-IN";
+          utterance.rate = 1;
+          utterance.onend = () => {
+            isSpeaking = false;
+            speakBtn.textContent = "🔊 Speak";
+          };
+
+          window.speechSynthesis.cancel(); // stop any previous speech
+          window.speechSynthesis.speak(utterance);
+
+          speakBtn.textContent = "⏹ Stop";
+          isSpeaking = true;
+        }
+      } else {
+        window.speechSynthesis.cancel();
+        speakBtn.textContent = "🔊 Speak";
+        isSpeaking = false;
       }
     });
 
@@ -131,3 +148,8 @@ async function loadPlantDetails() {
 
 // Run after page load
 window.onload = loadPlantDetails;
+
+// ✅ Stop speech if user leaves or reloads the page
+window.addEventListener("beforeunload", () => {
+  window.speechSynthesis.cancel();
+});
