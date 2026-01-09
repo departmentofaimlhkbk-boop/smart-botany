@@ -90,21 +90,22 @@ document.addEventListener("DOMContentLoaded", async () => {
       </table>
     `;
 
-    /* ---------- SPEAK / STOP LOGIC (STABLE) ---------- */
+    /* ---------- SPEAK / STOP LOGIC (CONVERSATIONAL) ---------- */
     const speakBtn = document.getElementById("speakBtn");
     let isSpeaking = false;
     let utterance;
 
     speakBtn.addEventListener("click", () => {
       if (!isSpeaking) {
+
+        // ✅ CONVERSATIONAL PLANT SPEECH (ONLY CONTENT, NO HEADINGS)
         let textToSpeak = `
-          ${plant.common_name}.
-          Scientific name ${plant.scientific_name}.
-          Category ${plant.category}.
-          Origin ${plant.origin}.
-          Age ${ageText}.
-          Seasonal flowering ${plant.seasonal_flowering}.
-          Medicinal value ${plant.medicinal_value}.
+          Hi! I am ${plant.common_name || "a plant"}.
+          My scientific name is ${plant.scientific_name || "not documented yet"}.
+          I originally come from ${plant.origin || "a beautiful place"}.
+          I am about ${ageText !== "-" ? ageText : "a few years"} old.
+          I bloom during ${plant.seasonal_flowering || "different seasons"}.
+          People value me because ${plant.medicinal_value || "I help nature and humans in many ways"}.
         `;
 
         utterance = new SpeechSynthesisUtterance(textToSpeak);
@@ -121,6 +122,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         speakBtn.textContent = "⏹ Stop";
         isSpeaking = true;
+
       } else {
         window.speechSynthesis.cancel();
         speakBtn.textContent = "🔊 Speak";
