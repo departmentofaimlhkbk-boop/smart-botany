@@ -3,12 +3,12 @@ async function loadPlants() {
   container.innerHTML = "Loading plants...";
 
   try {
-    console.log("Fetching plants from Supabase...");
-    const { data: plants, error } = await supabase.from("plants").select("*");
-    console.log("Plants fetched:", plants, error);
+    const { data: plants, error } = await supabase
+      .from("plants")
+      .select("*");
 
     if (error) {
-      container.innerHTML = "<p>❌ Error loading plants.</p>";
+      container.innerHTML = `<p style="color:red;">❌ ${error.message}</p>`;
       console.error(error);
       return;
     }
@@ -22,17 +22,25 @@ async function loadPlants() {
 
     plants.forEach((plant) => {
       const card = document.createElement("div");
-      card.className = "plant-card"; // <-- updated class to match CSS
+      card.className = "plant-card";
+
+      const imageUrl =
+        plant.image_urls && plant.image_urls.trim() !== ""
+          ? plant.image_urls
+          : "";
+
       card.innerHTML = `
-        <img src="${plant.image_urls?.split(',')[0] || ''}" alt="${plant.common_name}" />
-        <h3>${plant.common_name || '-'}</h3>
-        <p><strong>Scientific Name:</strong> ${plant.scientific_name || '-'}</p>
+        ${imageUrl ? `<img src="${imageUrl}" alt="${plant.common_name}">` : ""}
+        <h3>${plant.common_name}</h3>
+        <p><strong>Scientific Name:</strong> ${plant.scientific_name}</p>
         <a href="plant.html?id=${plant.id}">View Details</a>
       `;
+
       container.appendChild(card);
     });
   } catch (err) {
-    container.innerHTML = "<p>❌ Something went wrong while loading plants.</p>";
+    container.innerHTML =
+      "<p style='color:red;'>❌ JavaScript runtime error</p>";
     console.error("Unexpected error:", err);
   }
 }
