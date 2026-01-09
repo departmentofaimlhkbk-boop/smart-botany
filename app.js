@@ -2,46 +2,47 @@ async function loadPlants() {
   const container = document.getElementById("plant-list");
   container.innerHTML = "Loading plants...";
 
-  const { data: plants, error } = await supabase
-    .from("plants")
-    .select("*");
+  try {
+    const { data: plants, error } = await supabaseClient
+      .from("plants")
+      .select("*");
 
-  if (error) {
-    console.error(error);
-    container.innerHTML = "❌ Error loading plants";
-    return;
-  }
-
-  container.innerHTML = "";
-
-  plants.forEach(plant => {
-    let imageUrl = "placeholder.jpg";
-
-    if (typeof plant.image_urls === "string") {
-      const urls = plant.image_urls
-        .replace(/\n/g, "")   // ✅ remove line breaks
-        .split(",")
-        .map(u => u.trim())
-        .filter(u => u.startsWith("http"));
-
-      if (urls.length > 0) imageUrl = urls[0];
+    if (error) {
+      container.innerHTML = `<p>❌ ${error.message}</p>`;
+      console.error(error);
+      return;
     }
 
-    const card = document.createElement("div");
-    card.className = "plant-card";
+    if (!plants || plants.length === 0) {
+      container.innerHTML = "<p>No plants found.</p>";
+      return;
+    }
 
-    card.innerHTML = `
-      <img src="${imageUrl}" 
-           alt="${plant.common_name}"
-           onerror="this.src='placeholder.jpg'">
+    container.innerHTML = "";
 
-      <h3>${plant.common_name}</h3>
-      <p><strong>Scientific Name:</strong> ${plant.scientific_name}</p>
-      <a href="plant.html?id=${plant.id}">View Details</a>
-    `;
+    plants.forEach((plant) => {
+      const card = document.createElement("div");
+      card.className = "plant-card";
 
-    container.appendChild(card);
-  });
+      // Safe image handling
+      const imageUrl =
+        typeof plant.image_urls === "string" && plant.image_urls.length > 0
+          ? plant.image_urls
+          : "";
+
+      card.innerHTML = `
+        ${imageUrl ? `<img src="${imageUrl}" alt="${plant.common_name}">` : ""}
+        <h3>${plant.common_name || "-"}</h3>
+        <p><strong>Scientific Name:</strong> ${plant.scientific_name || "-"}</p>
+        <a href="plant.html?id=${plant.id}">View Details</a>
+      `;
+
+      container.appendChild(card);
+    });
+  } catch (err) {
+    console.error("Runtime error:", err);
+    container.innerHTML = "<p>❌ JavaScript runtime error</p>";
+  }
 }
 
-window.onload = loadPlants;
+window.addEventListener("load", loadPlants);
