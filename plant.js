@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", async () => {
 
-  // Run ONLY on plant.html
   if (!window.location.pathname.includes("plant.html")) return;
 
   const container = document.getElementById("plant-card");
@@ -14,7 +13,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
-  // ✅ Age calculation
   function calculateAge(dateString) {
     if (!dateString) return "-";
     const planted = new Date(dateString);
@@ -39,35 +37,25 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const ageText = calculateAge(plant.date_of_planting);
 
-    // Images
     let imagesHTML = "-";
     if (plant.image_urls) {
       imagesHTML = plant.image_urls
         .split(",")
-        .map(
-          url => `
+        .map(url => `
           <img src="${url.trim()}"
                style="width:160px;margin:6px;border-radius:8px"
                onerror="this.style.display='none'">
-        `
-        )
+        `)
         .join("");
     }
 
-    // ✅ Greeting sentence (THIS IS THE ONLY NEW TEXT)
-    const greetingText = `Hi! I'm ${plant.common_name}, flourishing at HKBK 🌿.`;
+    // ✅ THIS IS THE MAIN LINE (REPLACES OLD TITLE)
+    const greetingText =
+      `Hi! I'm ${plant.common_name}, flourishing at HKBK 🌿.`;
 
-    /* ---------- PAGE CONTENT ---------- */
     container.innerHTML = `
-      <h2>${plant.common_name}</h2>
+      <h2>${greetingText}</h2>
 
-      <!-- 🌿 Greeting line -->
-      <p id="plant-greeting"
-         style="font-size:18px;font-weight:600;margin:12px 0;">
-        ${greetingText}
-      </p>
-
-      <!-- 🔊 Speak Button -->
       <button id="speakBtn"
         style="margin:10px 0;padding:8px 14px;border:none;
                background:#2e7d32;color:white;
@@ -92,15 +80,13 @@ document.addEventListener("DOMContentLoaded", async () => {
       </table>
     `;
 
-    /* ---------- SPEAK LOGIC ---------- */
+    // 🔊 SPEAK LOGIC
     const speakBtn = document.getElementById("speakBtn");
     let isSpeaking = false;
     let utterance;
 
     speakBtn.addEventListener("click", () => {
       if (!isSpeaking) {
-
-        // ✅ Speak greeting + content ONLY (no headings)
         const textToSpeak = `
           ${greetingText}
           My scientific name is ${plant.scientific_name}.
@@ -120,7 +106,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         window.speechSynthesis.cancel();
         window.speechSynthesis.speak(utterance);
-
         speakBtn.textContent = "⏹ Stop";
         isSpeaking = true;
       } else {
@@ -136,7 +121,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 });
 
-// Stop speech on page exit
 window.addEventListener("beforeunload", () => {
   window.speechSynthesis.cancel();
 });
