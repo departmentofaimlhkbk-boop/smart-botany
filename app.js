@@ -1,48 +1,163 @@
-async function loadPlants() {
-  const container = document.getElementById("plant-list");
-  container.innerHTML = "Loading plants...";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Smart Campus Plant Information</title>
 
-  try {
-    const { data: plants, error } = await supabase
-      .from("plants")
-      .select("*");
-
-    if (error) {
-      container.innerHTML = `<p style="color:red;">❌ ${error.message}</p>`;
-      return;
+  <style>
+    /* Homepage plant list layout */
+    #plant-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 20px;
     }
 
-    if (!plants || plants.length === 0) {
-      container.innerHTML = "<p>No plants found.</p>";
-      return;
+    /* Card style */
+    .plant-card {
+      width: 180px;
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: center;
+      border-radius: 8px;
+      box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      transition: transform 0.2s;
     }
 
-    container.innerHTML = "";
+    .plant-card:hover {
+      transform: translateY(-3px);
+    }
 
-    plants.forEach((plant) => {
-      const card = document.createElement("div");
-      card.className = "plant-card";
+    .plant-card img {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 5px;
+    }
 
-      // ✅ SAFE image handling
-      let imageUrl = "";
-      if (typeof plant.image_urls === "string" && plant.image_urls.length > 0) {
-        imageUrl = plant.image_urls;
-      }
+    .plant-card h3 {
+      margin: 0;
+      font-size: 16px;
+      color: #333;
+    }
 
-      card.innerHTML = `
-        ${imageUrl ? `<img src="${imageUrl}" alt="${plant.common_name}">` : ""}
-        <h3>${plant.common_name || "-"}</h3>
-        <p><strong>Scientific Name:</strong> ${plant.scientific_name || "-"}</p>
-        <a href="plant.html?id=${plant.id}">View Details</a>
-      `;
+    /* Homepage Titles */
+    #homepage-titles {
+      text-align: center;
+      margin-bottom: 20px;
+    }
 
-      container.appendChild(card);
+    .logo-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 10px;
+    }
+
+    .college-logo {
+      width: 70px;
+      height: auto;
+    }
+
+    #homepage-titles h1 {
+      font-size: 36px;
+      margin: 0;
+      color: #2c3e50;
+    }
+
+    #homepage-titles h3 {
+      font-size: 20px;
+      margin: 5px 0;
+      color: #27ae60;
+    }
+
+    /* Search Bar */
+    #search-container {
+      text-align: center;
+      margin: 15px 0 25px 0;
+    }
+
+    #search-bar {
+      width: 90%;
+      max-width: 400px;
+      padding: 10px 15px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      outline: none;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    }
+
+    /* Credits */
+    .credits {
+      text-align: center;
+      font-family: "Times New Roman", Times, serif;
+      font-size: 13px;
+      color: #555;
+      margin: 30px 15px 10px 15px;
+      line-height: 1.4;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Homepage Titles -->
+  <div id="homepage-titles">
+    <div class="logo-header">
+      <img src="college-image.png" alt="College Logo" class="college-logo">
+      <h1>HKBK College Of Engineering</h1>
+    </div>
+    <h3>🌱 Campus Plant Information Management System</h3>
+  </div>
+
+  <!-- Search Bar -->
+  <div id="search-container">
+    <input type="text" id="search-bar" placeholder="Search plant by name...">
+  </div>
+
+  <!-- Plant list -->
+  <div id="plant-list">Loading plants...</div>
+
+  <!-- Credits -->
+  <footer class="credits">
+    Designed and developed by Jaffer H, Kishan K, Gowthami N, and Khushi M under the guidance of
+    Dr Tabassum Ara-Hod & Prof. Bharath V-Asst. Prof., Dept. of AIML
+  </footer>
+
+  <!-- ✅ FIXED: Supabase v2 (ONLY ONE SCRIPT) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <!-- Supabase config -->
+  <script src="config.js"></script>
+
+  <!-- App logic -->
+  <script src="app.js"></script>
+
+  <!-- Search logic -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const searchBar = document.getElementById("search-bar");
+      const plantList = document.getElementById("plant-list");
+
+      searchBar.addEventListener("keyup", () => {
+        const query = searchBar.value.toLowerCase();
+        const cards = plantList.querySelectorAll(".plant-card");
+
+        cards.forEach(card => {
+          card.style.display = card.textContent.toLowerCase().includes(query)
+            ? "flex"
+            : "none";
+        });
+      });
     });
-  } catch (err) {
-    console.error("Runtime error:", err);
-    container.innerHTML =
-      "<p style='color:red;'>❌ JavaScript runtime error</p>";
-  }
-}
+  </script>
 
-window.onload = loadPlants;
+</body>
+</html>
