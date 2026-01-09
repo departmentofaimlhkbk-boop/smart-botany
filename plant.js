@@ -1,20 +1,24 @@
 document.addEventListener("DOMContentLoaded", async () => {
-  const params = new URLSearchParams(window.location.search);
-  const plantId = Number(params.get("id"));
+
+  // ✅ Run ONLY on plant.html
+  if (!window.location.pathname.includes("plant.html")) {
+    return;
+  }
 
   const container = document.getElementById("plant-card");
 
   if (!container) {
-    console.error("❌ plant-card container not found");
+    console.warn("plant-card not found, stopping script.");
     return;
   }
+
+  const params = new URLSearchParams(window.location.search);
+  const plantId = Number(params.get("id"));
 
   if (!plantId || isNaN(plantId)) {
     container.innerHTML = "<p>❌ Invalid plant ID.</p>";
     return;
   }
-
-  console.log("Fetching plant ID:", plantId);
 
   try {
     const { data: plant, error } = await supabaseClient
@@ -24,30 +28,24 @@ document.addEventListener("DOMContentLoaded", async () => {
       .single();
 
     if (error || !plant) {
-      console.error("Supabase error:", error);
       container.innerHTML = "<p>❌ Plant not found.</p>";
       return;
     }
 
-    // Image handling
     let imagesHTML = "-";
-    if (typeof plant.image_urls === "string" && plant.image_urls.length > 0) {
+    if (plant.image_urls) {
       imagesHTML = plant.image_urls
         .split(",")
         .map(
-          url => `
-          <img src="${url.trim()}"
-               style="width:160px;margin:6px;border-radius:8px;"
-               alt="${plant.common_name}"
-               onerror="this.style.display='none'">
-        `
+          url => `<img src="${url.trim()}"
+                       style="width:160px;margin:6px;border-radius:8px"
+                       onerror="this.style.display='none'">`
         )
         .join("");
     }
 
     container.innerHTML = `
       <h2>${plant.common_name}</h2>
-
       <table class="plant-table">
         <tr><th>Scientific Name</th><td>${plant.scientific_name || "-"}</td></tr>
         <tr><th>Category</th><td>${plant.category || "-"}</td></tr>
@@ -59,13 +57,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         <tr><th>Images</th><td>${imagesHTML}</td></tr>
       </table>
     `;
+
   } catch (err) {
-    console.error("Runtime error:", err);
+    console.error(err);
     container.innerHTML = "<p>❌ Something went wrong.</p>";
   }
-});
-
-// Safety
-window.addEventListener("beforeunload", () => {
-  window.speechSynthesis.cancel();
 });
