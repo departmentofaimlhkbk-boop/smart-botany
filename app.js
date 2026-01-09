@@ -3,7 +3,7 @@ async function loadPlants() {
   container.innerHTML = "Loading plants...";
 
   try {
-    const { data: plants, error } = await supabase
+    const { data: plants, error } = await supabaseClient
       .from("plants")
       .select("*");
 
@@ -24,7 +24,7 @@ async function loadPlants() {
       const card = document.createElement("div");
       card.className = "plant-card";
 
-      // ✅ SAFE image handling (no split, no trim, no crash)
+      // Safe image handling
       const imageUrl =
         typeof plant.image_urls === "string" && plant.image_urls.length > 0
           ? plant.image_urls
@@ -41,9 +41,8 @@ async function loadPlants() {
     });
   } catch (err) {
     console.error("Runtime error:", err);
-    container.innerHTML =
-      "<p>❌ JavaScript runtime error</p>";
+    container.innerHTML = "<p>❌ JavaScript runtime error</p>";
   }
 }
 
-window.onload = loadPlants;
+window.addEventListener("load", loadPlants);
