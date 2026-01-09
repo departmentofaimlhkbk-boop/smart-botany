@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", async () => {
 
-  // ✅ Run ONLY on plant.html
+  // Run ONLY on plant.html
   if (!window.location.pathname.includes("plant.html")) {
     return;
   }
@@ -19,23 +19,16 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
-  // ✅ AGE CALCULATION FUNCTION
+  // ✅ AGE CALCULATION
   function calculateAge(dateString) {
     if (!dateString) return "-";
-
-    const plantedDate = new Date(dateString);
+    const planted = new Date(dateString);
     const today = new Date();
-
-    let age = today.getFullYear() - plantedDate.getFullYear();
-    const monthDiff = today.getMonth() - plantedDate.getMonth();
-
-    if (
-      monthDiff < 0 ||
-      (monthDiff === 0 && today.getDate() < plantedDate.getDate())
-    ) {
+    let age = today.getFullYear() - planted.getFullYear();
+    const m = today.getMonth() - planted.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < planted.getDate())) {
       age--;
     }
-
     return age >= 0 ? `${age} years` : "-";
   }
 
@@ -66,18 +59,26 @@ document.addEventListener("DOMContentLoaded", async () => {
         .join("");
     }
 
-    // ✅ Calculate Age
-    const plantAge = calculateAge(plant.date_of_planting);
+    const ageText = calculateAge(plant.date_of_planting);
 
+    /* ---------- PAGE CONTENT ---------- */
     container.innerHTML = `
       <h2>${plant.common_name}</h2>
+
+      <!-- 🔊 Speak / Stop Button -->
+      <button id="speakBtn"
+        style="margin:10px 0;padding:8px 14px;border:none;
+               background:#2e7d32;color:white;
+               border-radius:6px;cursor:pointer;">
+        🔊 Speak
+      </button>
 
       <table class="plant-table">
         <tr><th>Scientific Name</th><td>${plant.scientific_name || "-"}</td></tr>
         <tr><th>Category</th><td>${plant.category || "-"}</td></tr>
         <tr><th>Origin</th><td>${plant.origin || "-"}</td></tr>
         <tr><th>Date of Planting</th><td>${plant.date_of_planting || "-"}</td></tr>
-        <tr><th>Age</th><td>${plantAge}</td></tr>
+        <tr><th>Age</th><td>${ageText}</td></tr>
         <tr><th>Seasonal Flowering</th><td>${plant.seasonal_flowering || "-"}</td></tr>
         <tr><th>Quantitative Data</th><td>${plant.quantitative_data || "-"}</td></tr>
         <tr><th>Geo Location</th><td>${plant.geo_location || "-"}</td></tr>
@@ -89,8 +90,51 @@ document.addEventListener("DOMContentLoaded", async () => {
       </table>
     `;
 
+    /* ---------- SPEAK / STOP LOGIC (STABLE) ---------- */
+    const speakBtn = document.getElementById("speakBtn");
+    let isSpeaking = false;
+    let utterance;
+
+    speakBtn.addEventListener("click", () => {
+      if (!isSpeaking) {
+        let textToSpeak = `
+          ${plant.common_name}.
+          Scientific name ${plant.scientific_name}.
+          Category ${plant.category}.
+          Origin ${plant.origin}.
+          Age ${ageText}.
+          Seasonal flowering ${plant.seasonal_flowering}.
+          Medicinal value ${plant.medicinal_value}.
+        `;
+
+        utterance = new SpeechSynthesisUtterance(textToSpeak);
+        utterance.lang = "en-IN";
+        utterance.rate = 1;
+
+        utterance.onend = () => {
+          isSpeaking = false;
+          speakBtn.textContent = "🔊 Speak";
+        };
+
+        window.speechSynthesis.cancel();
+        window.speechSynthesis.speak(utterance);
+
+        speakBtn.textContent = "⏹ Stop";
+        isSpeaking = true;
+      } else {
+        window.speechSynthesis.cancel();
+        speakBtn.textContent = "🔊 Speak";
+        isSpeaking = false;
+      }
+    });
+
   } catch (err) {
     console.error(err);
     container.innerHTML = "<p>❌ Something went wrong.</p>";
   }
+});
+
+// Stop speech if page changes
+window.addEventListener("beforeunload", () => {
+  window.speechSynthesis.cancel();
 });
