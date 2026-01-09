@@ -32,6 +32,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       return;
     }
 
+    /* ---------- IMAGE HANDLING (UNCHANGED) ---------- */
     let imagesHTML = "-";
     if (plant.image_urls) {
       imagesHTML = plant.image_urls
@@ -44,6 +45,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         .join("");
     }
 
+    /* ---------- ONLY ADDING THESE 4 FIELDS ---------- */
+    const dateOfPlanting = plant.date_of_planting || "-";
+    const seasonalFlowering = plant.seasonal_flowering || "-";
+    const quantitativeData = plant.quantitative_data || "-";
+    const geoLocation = plant.geo_location || "-";
+
+    /* ---------- FINAL RENDER ---------- */
     container.innerHTML = `
       <h2>${plant.common_name}</h2>
       <table class="plant-table">
@@ -53,6 +61,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         <tr><th>Max Height</th><td>${plant.max_height || "-"}</td></tr>
         <tr><th>Water Requirement</th><td>${plant.water_requirement || "-"}</td></tr>
         <tr><th>Medicinal Value</th><td>${plant.medicinal_value || "-"}</td></tr>
+
+        <!-- ✅ NEW FIELDS -->
+        <tr><th>Date of Planting</th><td>${dateOfPlanting}</td></tr>
+        <tr><th>Seasonal Flowering</th><td>${seasonalFlowering}</td></tr>
+        <tr><th>Quantitative Data</th><td>${quantitativeData}</td></tr>
+        <tr><th>Geo Location</th><td>${geoLocation}</td></tr>
+
         <tr><th>Additional Info</th><td>${plant.additional_info || "-"}</td></tr>
         <tr><th>Images</th><td>${imagesHTML}</td></tr>
       </table>
