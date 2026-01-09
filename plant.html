@@ -7,11 +7,11 @@
 
   <!-- Lightbox CSS -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css" rel="stylesheet" />
+
   <!-- Custom styles -->
   <link rel="stylesheet" href="styles.css">
 
   <style>
-    /* Inline styles for plant details */
     .plant-container {
       background: white;
       padding: 20px;
@@ -20,127 +20,115 @@
       max-width: 900px;
       margin: 40px auto;
     }
+
     .plant-container h2 {
       text-align: center;
       margin-bottom: 20px;
     }
+
     .plant-table {
       width: 100%;
       border-collapse: collapse;
     }
+
     .plant-table th, .plant-table td {
       border: 1px solid #ddd;
       padding: 12px;
       text-align: left;
     }
+
     .plant-table th {
       background: #f2f2f2;
       width: 30%;
     }
+
     .images {
       display: flex;
       gap: 12px;
       margin-top: 15px;
       flex-wrap: wrap;
     }
+
     .images img {
       width: 200px;
       border-radius: 8px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.2);
       cursor: pointer;
-      transition: transform 0.2s ease-in-out;
-    }
-    .images img:hover {
-      transform: scale(1.05);
     }
 
-    /* Header styles */
     .page-header {
       text-align: center;
       margin: 20px auto 30px auto;
     }
+
     .college-logo {
       width: 80px;
-      height: auto;
-      display: block;
-      margin: 0 auto 10px;
+      margin-bottom: 10px;
     }
+
     .main-title {
       font-size: 28px;
       font-weight: bold;
-      color: #222;
-    }
-    .project-title {
-      font-size: 18px;
-      font-weight: normal;
-      color: #2e7d32;
-      margin-top: 5px;
     }
 
-    /* Main Page button */
+    .project-title {
+      font-size: 18px;
+      color: #2e7d32;
+    }
+
+    .main-page-container {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
     .main-page-btn {
-      display: inline-block;
-      margin: 10px auto 20px auto;
       padding: 8px 16px;
       background: #2e7d32;
       color: white;
       border-radius: 6px;
       text-decoration: none;
       font-weight: bold;
-      transition: background 0.3s;
-    }
-    .main-page-btn:hover {
-      background: #1b5e20;
-    }
-    .main-page-container {
-      text-align: center;
     }
 
-    /* Credits footer */
     .credits {
       text-align: center;
       font-family: "Times New Roman", Times, serif;
       font-size: 13px;
       color: #555;
       margin: 30px 15px 10px 15px;
-      line-height: 1.4;
-    }
-
-    @media (max-width: 768px) {
-      .credits {
-        font-size: 12px;
-        margin: 20px 10px;
-      }
     }
   </style>
 </head>
+
 <body>
-  <!-- Header section -->
+
+  <!-- Header -->
   <header class="page-header">
     <img src="college-image.png" alt="College Logo" class="college-logo">
     <h1 class="main-title">HKBK College Of Engineering</h1>
     <h2 class="project-title">🌱 Campus Greenery Information Management System - CGIMS</h2>
   </header>
 
-  <!-- Main Page button -->
+  <!-- Home button -->
   <div class="main-page-container">
     <a href="index.html" class="main-page-btn">🏠 Home Page</a>
   </div>
 
-  <div class="plant-container" id="plant-card">
+  <!-- ✅ IMPORTANT: ID MUST MATCH plant.js -->
+  <div class="plant-container" id="plant-details">
     Loading plant details...
   </div>
 
-  <!-- Credits Section -->
+  <!-- Credits -->
   <footer class="credits">
-   Designed and developed by Jaffer H, Kishan K, Gowthami N, and Khushi M under the guidance of Dr Tabassum Ara-Hod & Prof. and Prof. Bharath V-Asst. Prof., Dept. of AIML
+    Designed and developed by Jaffer H, Kishan K, Gowthami N, and Khushi M under the guidance of
+    Dr Tabassum Ara-Hod & Prof. Bharath V-Asst. Prof., Dept. of AIML
   </footer>
 
-  <!-- Scripts: Supabase first, then config.js, then plant.js -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <!-- ✅ CORRECT SCRIPTS (VERY IMPORTANT ORDER) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="config.js"></script>
   <script src="plant.js"></script>
 
-  <!-- ✅ Removed auto-speech script to fix mobile & desktop -->
 </body>
 </html>
