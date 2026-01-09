@@ -3,19 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <title>Smart Campus Plant Information</title>
+
   <style>
     /* Homepage plant list layout */
     #plant-list {
       display: flex;
-      flex-wrap: wrap;       /* allow multiple rows */
-      justify-content: center; /* center the cards horizontally */
-      gap: 20px;             /* spacing between cards */
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
       margin-top: 20px;
     }
 
     /* Card style */
     .plant-card {
-      width: 180px;               
+      width: 180px;
       border: 1px solid #ccc;
       padding: 10px;
       text-align: center;
@@ -33,9 +34,9 @@
     }
 
     .plant-card img {
-      width: 100%;               
-      height: 120px;             
-      object-fit: cover;          
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
       border-radius: 5px;
     }
 
@@ -51,12 +52,11 @@
       margin-bottom: 20px;
     }
 
-    /* ✅ Logo + title flexbox */
     .logo-header {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 15px; /* space between logo and text */
+      gap: 15px;
       margin-bottom: 10px;
     }
 
@@ -77,7 +77,7 @@
       color: #27ae60;
     }
 
-    /* ✅ Search Bar Styling */
+    /* Search Bar */
     #search-container {
       text-align: center;
       margin: 15px 0 25px 0;
@@ -92,14 +92,9 @@
       border-radius: 8px;
       outline: none;
       box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-      transition: border 0.2s ease-in-out;
     }
 
-    #search-bar:focus {
-      border: 1px solid #27ae60;
-    }
-
-    /* ✅ Credits footer */
+    /* Credits */
     .credits {
       text-align: center;
       font-family: "Times New Roman", Times, serif;
@@ -108,69 +103,61 @@
       margin: 30px 15px 10px 15px;
       line-height: 1.4;
     }
-
-    @media (max-width: 768px) {
-      .credits {
-        font-size: 12px;
-        margin: 20px 10px;
-      }
-    }
   </style>
 </head>
+
 <body>
 
-  <!-- ✅ Updated Homepage Titles with Logo -->
+  <!-- Homepage Titles -->
   <div id="homepage-titles">
     <div class="logo-header">
       <img src="college-image.png" alt="College Logo" class="college-logo">
-      <div>
-        <h1>HKBK College Of Engineering</h1>
-      </div>
+      <h1>HKBK College Of Engineering</h1>
     </div>
     <h3>🌱 Campus Plant Information Management System</h3>
   </div>
 
-  <!-- ✅ Search Bar -->
+  <!-- Search Bar -->
   <div id="search-container">
     <input type="text" id="search-bar" placeholder="Search plant by name...">
   </div>
 
+  <!-- Plant list -->
   <div id="plant-list">Loading plants...</div>
 
-  <!-- ✅ Credits Section -->
+  <!-- Credits -->
   <footer class="credits">
-    Designed and developed by Jaffer H, Kishan K, Gowthami N, and Khushi M under the guidance of Dr Tabassum Ara-Hod & Prof. and Prof. Bharath V-Asst. Prof., Dept. of AIML
+    Designed and developed by Jaffer H, Kishan K, Gowthami N, and Khushi M under the guidance of
+    Dr Tabassum Ara-Hod & Prof. Bharath V-Asst. Prof., Dept. of AIML
   </footer>
 
-  <!-- Supabase client -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <!-- ✅ FIXED: Supabase v2 (ONLY ONE SCRIPT) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  <!-- Your config -->
+  <!-- Supabase config -->
   <script src="config.js"></script>
 
-  <!-- Your app logic -->
+  <!-- App logic -->
   <script src="app.js"></script>
 
-  <!-- ✅ Search Logic -->
+  <!-- Search logic -->
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       const searchBar = document.getElementById("search-bar");
       const plantList = document.getElementById("plant-list");
 
-      if (searchBar) {
-        searchBar.addEventListener("keyup", () => {
-          const query = searchBar.value.toLowerCase();
-          const cards = plantList.querySelectorAll(".plant-card");
+      searchBar.addEventListener("keyup", () => {
+        const query = searchBar.value.toLowerCase();
+        const cards = plantList.querySelectorAll(".plant-card");
 
-          cards.forEach(card => {
-            const name = card.textContent.toLowerCase();
-            card.style.display = name.includes(query) ? "flex" : "none";
-          });
+        cards.forEach(card => {
+          card.style.display = card.textContent.toLowerCase().includes(query)
+            ? "flex"
+            : "none";
         });
-      }
+      });
     });
   </script>
 
 </body>
 </html>
-
