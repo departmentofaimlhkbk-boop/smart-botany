@@ -2,47 +2,46 @@ async function loadPlants() {
   const container = document.getElementById("plant-list");
   container.innerHTML = "Loading plants...";
 
-  try {
-    const { data: plants, error } = await supabaseClient
-      .from("plants")
-      .select("*");
+  const { data: plants, error } = await supabase
+    .from("plants")
+    .select("*");
 
-    if (error) {
-      container.innerHTML = `<p>❌ ${error.message}</p>`;
-      console.error(error);
-      return;
-    }
-
-    if (!plants || plants.length === 0) {
-      container.innerHTML = "<p>No plants found.</p>";
-      return;
-    }
-
-    container.innerHTML = "";
-
-    plants.forEach((plant) => {
-      const card = document.createElement("div");
-      card.className = "plant-card";
-
-      // Safe image handling
-      const imageUrl =
-        typeof plant.image_urls === "string" && plant.image_urls.length > 0
-          ? plant.image_urls
-          : "";
-
-      card.innerHTML = `
-        ${imageUrl ? `<img src="${imageUrl}" alt="${plant.common_name}">` : ""}
-        <h3>${plant.common_name || "-"}</h3>
-        <p><strong>Scientific Name:</strong> ${plant.scientific_name || "-"}</p>
-        <a href="plant.html?id=${plant.id}">View Details</a>
-      `;
-
-      container.appendChild(card);
-    });
-  } catch (err) {
-    console.error("Runtime error:", err);
-    container.innerHTML = "<p>❌ JavaScript runtime error</p>";
+  if (error) {
+    console.error(error);
+    container.innerHTML = "❌ Error loading plants";
+    return;
   }
+
+  container.innerHTML = "";
+
+  plants.forEach(plant => {
+    let imageUrl = "placeholder.jpg";
+
+    if (typeof plant.image_urls === "string") {
+      const urls = plant.image_urls
+        .replace(/\n/g, "")   // ✅ remove line breaks
+        .split(",")
+        .map(u => u.trim())
+        .filter(u => u.startsWith("http"));
+
+      if (urls.length > 0) imageUrl = urls[0];
+    }
+
+    const card = document.createElement("div");
+    card.className = "plant-card";
+
+    card.innerHTML = `
+      <img src="${imageUrl}" 
+           alt="${plant.common_name}"
+           onerror="this.src='placeholder.jpg'">
+
+      <h3>${plant.common_name}</h3>
+      <p><strong>Scientific Name:</strong> ${plant.scientific_name}</p>
+      <a href="plant.html?id=${plant.id}">View Details</a>
+    `;
+
+    container.appendChild(card);
+  });
 }
 
-window.addEventListener("load", loadPlants);
+window.onload = loadPlants;
