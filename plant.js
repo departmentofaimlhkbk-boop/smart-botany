@@ -61,13 +61,35 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const ageText = calculateAge(plant.date_of_planting);
 
+    // ✅ CONVERSATIONAL TEXT (PLANT → HUMAN)
+    const conversationText = `
+      Hi! I am <strong>${plant.common_name || "a plant"}</strong>.
+      My scientific name is <em>${plant.scientific_name || "not documented yet"}</em>.
+      I originally come from ${plant.origin || "a beautiful place"}.
+      I am about ${ageText !== "-" ? ageText : "a few years"} old.
+      I bloom during ${plant.seasonal_flowering || "different seasons"}.
+      People value me because ${plant.medicinal_value || "I help nature and humans in many ways"}.
+    `;
+
     /* ---------- PAGE CONTENT ---------- */
     container.innerHTML = `
       <h2>${plant.common_name}</h2>
 
+      <!-- 🌱 Conversational Text -->
+      <div style="
+        background:#f1f8f4;
+        padding:15px;
+        border-radius:10px;
+        margin:15px 0;
+        font-size:16px;
+        line-height:1.6;
+        color:#2e7d32;">
+        ${conversationText}
+      </div>
+
       <!-- 🔊 Speak / Stop Button -->
       <button id="speakBtn"
-        style="margin:10px 0;padding:8px 14px;border:none;
+        style="margin-bottom:15px;padding:8px 14px;border:none;
                background:#2e7d32;color:white;
                border-radius:6px;cursor:pointer;">
         🔊 Speak
@@ -90,7 +112,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       </table>
     `;
 
-    /* ---------- SPEAK / STOP LOGIC (CONVERSATIONAL) ---------- */
+    /* ---------- SPEAK / STOP LOGIC ---------- */
     const speakBtn = document.getElementById("speakBtn");
     let isSpeaking = false;
     let utterance;
@@ -98,7 +120,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     speakBtn.addEventListener("click", () => {
       if (!isSpeaking) {
 
-        // ✅ CONVERSATIONAL PLANT SPEECH (ONLY CONTENT, NO HEADINGS)
         let textToSpeak = `
           Hi! I am ${plant.common_name || "a plant"}.
           My scientific name is ${plant.scientific_name || "not documented yet"}.
