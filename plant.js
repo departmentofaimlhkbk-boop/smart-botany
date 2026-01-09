@@ -1,15 +1,11 @@
-// plant.js - load plant details dynamically by ID (FIXED)
+document.addEventListener("DOMContentLoaded", async () => {
+  const params = new URLSearchParams(window.location.search);
+  const plantId = Number(params.get("id"));
 
-const params = new URLSearchParams(window.location.search);
-
-// ✅ FIX 1: convert ID to NUMBER
-const plantId = Number(params.get("id"));
-
-async function loadPlantDetails() {
   const container = document.getElementById("plant-card");
 
   if (!container) {
-    console.error("❌ Container not found");
+    console.error("❌ plant-card container not found");
     return;
   }
 
@@ -21,7 +17,6 @@ async function loadPlantDetails() {
   console.log("Fetching plant ID:", plantId);
 
   try {
-    // ✅ FIX 2: use correct Supabase client + numeric ID
     const { data: plant, error } = await supabaseClient
       .from("plants")
       .select("*")
@@ -34,15 +29,16 @@ async function loadPlantDetails() {
       return;
     }
 
-    // ✅ SAFE image handling
+    // Image handling
     let imagesHTML = "-";
     if (typeof plant.image_urls === "string" && plant.image_urls.length > 0) {
-      const urls = plant.image_urls.split(",").map(u => u.trim());
-      imagesHTML = urls
+      imagesHTML = plant.image_urls
+        .split(",")
         .map(
-          (url, i) => `
-          <img src="${url}" alt="${plant.common_name}"
+          url => `
+          <img src="${url.trim()}"
                style="width:160px;margin:6px;border-radius:8px;"
+               alt="${plant.common_name}"
                onerror="this.style.display='none'">
         `
         )
@@ -63,17 +59,13 @@ async function loadPlantDetails() {
         <tr><th>Images</th><td>${imagesHTML}</td></tr>
       </table>
     `;
-
   } catch (err) {
     console.error("Runtime error:", err);
     container.innerHTML = "<p>❌ Something went wrong.</p>";
   }
-}
+});
 
-// Run after page load
-window.addEventListener("load", loadPlantDetails);
-
-// Stop speech if any (safety)
+// Safety
 window.addEventListener("beforeunload", () => {
   window.speechSynthesis.cancel();
 });
