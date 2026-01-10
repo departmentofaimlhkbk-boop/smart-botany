@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
-  /* ---------------- AGE CALCULATION ---------------- */
+  /* ---------- AGE CALCULATION ---------- */
   function calculateAge(dateString) {
     if (!dateString) return "My age is a little secret 🤫.";
     const planted = new Date(dateString);
@@ -26,14 +26,24 @@ document.addEventListener("DOMContentLoaded", async () => {
       : "My age is a little secret 🤫.";
   }
 
-  /* ---------------- GREETINGS ---------------- */
+  /* ---------- PHONETIC CAMPUS NAME (FOR TTS) ---------- */
+  const campusName = {
+    en: "HKBK",
+    kn: "ಎಚ್ ಕೆ ಬಿ ಕೆ",
+    ta: "எச் கே பி கே",
+    te: "హెచ్ కె బి కె",
+    ml: "എച്ച് കെ ബി കെ",
+    hi: "एच के बी के"
+  };
+
+  /* ---------- GREETINGS ---------- */
   const greetings = {
-    en: p => `Hi! I'm ${p}, flourishing at HKBK 🌿.`,
-    kn: p => `ನಮಸ್ಕಾರ! ನಾನು ${p}, HKBKನಲ್ಲಿ ಚೆನ್ನಾಗಿ ಬೆಳೆಯುತ್ತಿದ್ದೇನೆ 🌿.`,
-    ta: p => `வணக்கம்! நான் ${p}, HKBK வளாகத்தில் நன்றாக வளர்ந்து கொண்டிருக்கிறேன் 🌿.`,
-    te: p => `నమస్కారం! నేను ${p}, HKBKలో సంతోషంగా పెరుగుతున్నాను 🌿.`,
-    ml: p => `നമസ്കാരം! ഞാൻ ${p}, HKBK ക്യാമ്പസിൽ നന്നായി വളരുന്നു 🌿.`,
-    hi: p => `नमस्ते! मैं ${p}, HKBK में अच्छी तरह से बढ़ रहा हूँ 🌿.`
+    en: p => `Hi! I'm ${p}, flourishing at ${campusName.en} 🌿.`,
+    kn: p => `ನಮಸ್ಕಾರ! ನಾನು ${p}, ${campusName.kn}ನಲ್ಲಿ ಚೆನ್ನಾಗಿ ಬೆಳೆಯುತ್ತಿದ್ದೇನೆ 🌿.`,
+    ta: p => `வணக்கம்! நான் ${p}, ${campusName.ta} வளாகத்தில் நன்றாக வளர்ந்து கொண்டிருக்கிறேன் 🌿.`,
+    te: p => `నమస్కారం! నేను ${p}, ${campusName.te}లో సంతోషంగా పెరుగుతున్నాను 🌿.`,
+    ml: p => `നമസ്കാരം! ഞാൻ ${p}, ${campusName.ml} ക്യാമ്പസിൽ നന്നായി വളരുന്നു 🌿.`,
+    hi: p => `नमस्ते! मैं ${p}, ${campusName.hi} में अच्छी तरह से बढ़ रहा हूँ 🌿.`
   };
 
   const speechLang = {
@@ -45,7 +55,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     hi: "hi-IN"
   };
 
-  /* ---------------- PLANT NAME MAP ---------------- */
+  /* ---------- PLANT NAME MAP ---------- */
   const plantNameMap = {
     1: {
       en: "Copperleaf",
@@ -92,7 +102,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   let currentLang = "en";
   let isSpeaking = false;
 
-  /* ---------------- VOICE HANDLING (FIXED) ---------------- */
+  /* ---------- VOICE HANDLING ---------- */
   function getVoice(langCode) {
     const voices = window.speechSynthesis.getVoices();
     if (!voices.length) return null;
@@ -123,7 +133,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     window.speechSynthesis.speak(utterance);
   }
 
-  // Force browser to load voices
+  // Force voice loading (important for Indian languages)
   window.speechSynthesis.onvoiceschanged = () => {};
 
   try {
@@ -156,7 +166,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       plantNameMap[plant.id]?.[currentLang] ||
       plant.common_name;
 
-    /* ---------------- PAGE RENDER ---------------- */
+    /* ---------- PAGE RENDER ---------- */
     container.innerHTML = `
       <h2 id="greetingText">${greetings.en(getPlantName())}</h2>
 
