@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       : "My age is a little secret 🤫.";
   }
 
-  /* ---------------- LANGUAGE GREETINGS ---------------- */
+  /* ---------------- GREETINGS ---------------- */
   const greetings = {
     en: p => `Hi! I'm ${p}, flourishing at HKBK 🌿.`,
     kn: p => `ನಮಸ್ಕಾರ! ನಾನು ${p}, HKBKನಲ್ಲಿ ಚೆನ್ನಾಗಿ ಬೆಳೆಯುತ್ತಿದ್ದೇನೆ 🌿.`,
@@ -45,7 +45,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     hi: "hi-IN"
   };
 
-  /* ---------------- PLANT NAME MAP (METHOD 1) ---------------- */
+  /* ---------------- PLANT NAME MAP ---------------- */
   const plantNameMap = {
     1: {
       en: "Copperleaf",
@@ -92,16 +92,27 @@ document.addEventListener("DOMContentLoaded", async () => {
   let currentLang = "en";
   let isSpeaking = false;
 
+  /* ---------------- VOICE HANDLING (FIXED) ---------------- */
+  function getVoice(langCode) {
+    const voices = window.speechSynthesis.getVoices();
+    if (!voices.length) return null;
+
+    let voice = voices.find(v => v.lang === langCode);
+    if (!voice) {
+      const base = langCode.split("-")[0];
+      voice = voices.find(v => v.lang.startsWith(base));
+    }
+    return voice || null;
+  }
+
   function speakText(text, langCode) {
     window.speechSynthesis.cancel();
 
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = langCode;
+    utterance.rate = 1;
 
-    const voices = speechSynthesis.getVoices();
-    const voice = voices.find(v =>
-      v.lang.startsWith(langCode.split("-")[0])
-    );
+    const voice = getVoice(langCode);
     if (voice) utterance.voice = voice;
 
     utterance.onend = () => {
@@ -109,8 +120,11 @@ document.addEventListener("DOMContentLoaded", async () => {
       langBtn.textContent = "🌐 Language";
     };
 
-    speechSynthesis.speak(utterance);
+    window.speechSynthesis.speak(utterance);
   }
+
+  // Force browser to load voices
+  window.speechSynthesis.onvoiceschanged = () => {};
 
   try {
     const { data: plant, error } = await supabaseClient
