@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
-  // ---------- AGE CALCULATION ----------
+  /* ---------------- AGE CALCULATION ---------------- */
   function calculateAge(dateString) {
     if (!dateString) return "My age is a little secret 🤫.";
     const planted = new Date(dateString);
@@ -26,14 +26,14 @@ document.addEventListener("DOMContentLoaded", async () => {
       : "My age is a little secret 🤫.";
   }
 
-  // ---------- LANGUAGE GREETING TEMPLATES ----------
+  /* ---------------- LANGUAGE GREETINGS ---------------- */
   const greetings = {
-    en: (name) => `Hi! I'm ${name}, flourishing at HKBK 🌿.`,
-    kn: (name) => `ನಮಸ್ಕಾರ! ನಾನು ${name}, HKBKನಲ್ಲಿ ಚೆನ್ನಾಗಿ ಬೆಳೆಯುತ್ತಿದ್ದೇನೆ 🌿.`,
-    ta: (name) => `வணக்கம்! நான் ${name}, HKBK வளாகத்தில் நன்றாக வளர்ந்து கொண்டிருக்கிறேன் 🌿.`,
-    te: (name) => `నమస్కారం! నేను ${name}, HKBKలో సంతోషంగా పెరుగుతున్నాను 🌿.`,
-    ml: (name) => `നമസ്കാരം! ഞാൻ ${name}, HKBK ക്യാമ്പസിൽ നന്നായി വളരുന്നു 🌿.`,
-    hi: (name) => `नमस्ते! मैं ${name}, HKBK में अच्छी तरह से बढ़ रहा हूँ 🌿.`
+    en: p => `Hi! I'm ${p}, flourishing at HKBK 🌿.`,
+    kn: p => `ನಮಸ್ಕಾರ! ನಾನು ${p}, HKBKನಲ್ಲಿ ಚೆನ್ನಾಗಿ ಬೆಳೆಯುತ್ತಿದ್ದೇನೆ 🌿.`,
+    ta: p => `வணக்கம்! நான் ${p}, HKBK வளாகத்தில் நன்றாக வளர்ந்து கொண்டிருக்கிறேன் 🌿.`,
+    te: p => `నమస్కారం! నేను ${p}, HKBKలో సంతోషంగా పెరుగుతున్నాను 🌿.`,
+    ml: p => `നമസ്കാരം! ഞാൻ ${p}, HKBK ക്യാമ്പസിൽ നന്നായി വളരുന്നു 🌿.`,
+    hi: p => `नमस्ते! मैं ${p}, HKBK में अच्छी तरह से बढ़ रहा हूँ 🌿.`
   };
 
   const speechLang = {
@@ -45,9 +45,72 @@ document.addEventListener("DOMContentLoaded", async () => {
     hi: "hi-IN"
   };
 
+  /* ---------------- PLANT NAME MAP (METHOD 1) ---------------- */
+  const plantNameMap = {
+    1: {
+      en: "Copperleaf",
+      kn: "ತಾಮ್ರ ಎಲೆ ಸಸ್ಯ",
+      ta: "செம்பருத்தி இலை",
+      te: "కాపర్ లీఫ్ మొక్క",
+      ml: "കോപ്പർലീഫ് ചെടി",
+      hi: "कॉपरलीफ पौधा"
+    },
+    2: {
+      en: "Aloe Vera",
+      kn: "ಲೋಳೆ ಸರ",
+      ta: "கற்றாழை",
+      te: "కలబంద",
+      ml: "കറ്റാർവാഴ",
+      hi: "घृतकुमारी"
+    },
+    3: {
+      en: "Sugar Apple",
+      kn: "ಸೀತಾಫಲ",
+      ta: "சீதாப்பழம்",
+      te: "సీతాఫలం",
+      ml: "സീതപ്പഴം",
+      hi: "सीताफल"
+    },
+    4: {
+      en: "Arborvitae",
+      kn: "ತುಜಾ ಮರ",
+      ta: "துஜா மரம்",
+      te: "తూజా చెట్టు",
+      ml: "തുജ മരങ്ങൾ",
+      hi: "थूजा वृक्ष"
+    },
+    5: {
+      en: "Avocado",
+      kn: "ಅವಕಾಡೊ",
+      ta: "அவகேடோ",
+      te: "అవకాడో",
+      ml: "അവക്കാഡോ",
+      hi: "एवोकाडो"
+    }
+  };
+
   let currentLang = "en";
   let isSpeaking = false;
-  let utterance;
+
+  function speakText(text, langCode) {
+    window.speechSynthesis.cancel();
+
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = langCode;
+
+    const voices = speechSynthesis.getVoices();
+    const voice = voices.find(v =>
+      v.lang.startsWith(langCode.split("-")[0])
+    );
+    if (voice) utterance.voice = voice;
+
+    utterance.onend = () => {
+      isSpeaking = false;
+      langBtn.textContent = "🌐 Language";
+    };
+
+    speechSynthesis.speak(utterance);
+  }
 
   try {
     const { data: plant, error } = await supabaseClient
@@ -75,11 +138,14 @@ document.addEventListener("DOMContentLoaded", async () => {
         .join("");
     }
 
-    // ---------- INITIAL PAGE (ENGLISH DEFAULT) ----------
-    container.innerHTML = `
-      <h2 id="greetingText">${greetings.en(plant.common_name)}</h2>
+    const getPlantName = () =>
+      plantNameMap[plant.id]?.[currentLang] ||
+      plant.common_name;
 
-      <!-- 🌐 Language / Stop Button -->
+    /* ---------------- PAGE RENDER ---------------- */
+    container.innerHTML = `
+      <h2 id="greetingText">${greetings.en(getPlantName())}</h2>
+
       <button id="langBtn"
         style="margin:10px 0;padding:8px 14px;border:none;
                background:#2e7d32;color:white;
@@ -87,12 +153,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         🌐 Language
       </button>
 
-      <!-- Language Popup -->
       <div id="langPopup"
            style="display:none;position:absolute;
                   background:#fff;border:1px solid #ccc;
-                  border-radius:6px;padding:6px;
-                  box-shadow:0 4px 12px rgba(0,0,0,0.15);">
+                  border-radius:6px;padding:6px;">
         <div data-lang="en">English</div>
         <div data-lang="kn">ಕನ್ನಡ</div>
         <div data-lang="ta">தமிழ்</div>
@@ -102,9 +166,9 @@ document.addEventListener("DOMContentLoaded", async () => {
       </div>
 
       <table class="plant-table">
-        <tr><th>Scientific Name</th><td>My scientific name is ${plant.scientific_name || "still being studied"}.</td></tr>
+        <tr><th>Scientific Name</th><td>My scientific name is ${plant.scientific_name || "-"}</td></tr>
         <tr><th>Category</th><td>I belong to the ${plant.category || "plant"} category.</td></tr>
-        <tr><th>Origin</th><td>${plant.origin ? `I originally come from ${plant.origin}.` : "My origin is a bit of a mystery."}</td></tr>
+        <tr><th>Origin</th><td>${plant.origin || "-"}</td></tr>
         <tr><th>Date of Planting</th><td>${plant.date_of_planting || "-"}</td></tr>
         <tr><th>Age</th><td>${ageText}</td></tr>
         <tr><th>Seasonal Flowering</th><td>${plant.seasonal_flowering || "-"}</td></tr>
@@ -113,7 +177,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         <tr><th>Max Height</th><td>${plant.max_height || "-"}</td></tr>
         <tr><th>Water Requirement</th><td>${plant.water_requirement || "-"}</td></tr>
         <tr><th>Medicinal Value</th><td>${plant.medicinal_value || "-"}</td></tr>
-        <tr><th>Additional Info</th><td>${plant.additional_info || "-"}</td></tr>
         <tr><th>Images</th><td>${imagesHTML}</td></tr>
       </table>
     `;
@@ -122,10 +185,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     const popup = document.getElementById("langPopup");
     const greetingEl = document.getElementById("greetingText");
 
-    // Toggle popup
     langBtn.addEventListener("click", () => {
       if (isSpeaking) {
-        window.speechSynthesis.cancel();
+        speechSynthesis.cancel();
         isSpeaking = false;
         langBtn.textContent = "🌐 Language";
         return;
@@ -133,29 +195,19 @@ document.addEventListener("DOMContentLoaded", async () => {
       popup.style.display = popup.style.display === "block" ? "none" : "block";
     });
 
-    // Language selection
     popup.querySelectorAll("div").forEach(item => {
       item.addEventListener("click", () => {
         popup.style.display = "none";
         currentLang = item.dataset.lang;
 
-        const greeting = greetings[currentLang](plant.common_name);
+        const plantName = getPlantName();
+        const greeting = greetings[currentLang](plantName);
+
         greetingEl.textContent = greeting;
-
-        utterance = new SpeechSynthesisUtterance(greeting);
-        utterance.lang = speechLang[currentLang];
-        utterance.rate = 1;
-
-        utterance.onend = () => {
-          isSpeaking = false;
-          langBtn.textContent = "🌐 Language";
-        };
-
-        window.speechSynthesis.cancel();
-        window.speechSynthesis.speak(utterance);
-
         langBtn.textContent = "⏹ Stop";
         isSpeaking = true;
+
+        speakText(greeting, speechLang[currentLang]);
       });
     });
 
@@ -165,7 +217,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 });
 
-// Stop speech if page unloads
 window.addEventListener("beforeunload", () => {
-  window.speechSynthesis.cancel();
+  speechSynthesis.cancel();
 });
