@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", async () => {
 
-  // Run ONLY on plant.html
   if (!window.location.pathname.includes("plant.html")) return;
 
   const container = document.getElementById("plant-card");
@@ -14,7 +13,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
-  // ✅ Age calculation (auto updates every year)
+  // ---------- AGE CALCULATION ----------
   function calculateAge(dateString) {
     if (!dateString) return "My age is a little secret 🤫.";
     const planted = new Date(dateString);
@@ -26,6 +25,29 @@ document.addEventListener("DOMContentLoaded", async () => {
       ? `I am about ${age} years old.`
       : "My age is a little secret 🤫.";
   }
+
+  // ---------- LANGUAGE GREETING TEMPLATES ----------
+  const greetings = {
+    en: (name) => `Hi! I'm ${name}, flourishing at HKBK 🌿.`,
+    kn: (name) => `ನಮಸ್ಕಾರ! ನಾನು ${name}, HKBKನಲ್ಲಿ ಚೆನ್ನಾಗಿ ಬೆಳೆಯುತ್ತಿದ್ದೇನೆ 🌿.`,
+    ta: (name) => `வணக்கம்! நான் ${name}, HKBK வளாகத்தில் நன்றாக வளர்ந்து கொண்டிருக்கிறேன் 🌿.`,
+    te: (name) => `నమస్కారం! నేను ${name}, HKBKలో సంతోషంగా పెరుగుతున్నాను 🌿.`,
+    ml: (name) => `നമസ്കാരം! ഞാൻ ${name}, HKBK ക്യാമ്പസിൽ നന്നായി വളരുന്നു 🌿.`,
+    hi: (name) => `नमस्ते! मैं ${name}, HKBK में अच्छी तरह से बढ़ रहा हूँ 🌿.`
+  };
+
+  const speechLang = {
+    en: "en-IN",
+    kn: "kn-IN",
+    ta: "ta-IN",
+    te: "te-IN",
+    ml: "ml-IN",
+    hi: "hi-IN"
+  };
+
+  let currentLang = "en";
+  let isSpeaking = false;
+  let utterance;
 
   try {
     const { data: plant, error } = await supabaseClient
@@ -39,7 +61,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       return;
     }
 
-    // Images
+    const ageText = calculateAge(plant.date_of_planting);
+
     let imagesHTML = "-";
     if (plant.image_urls) {
       imagesHTML = plant.image_urls
@@ -52,143 +75,88 @@ document.addEventListener("DOMContentLoaded", async () => {
         .join("");
     }
 
-    const ageText = calculateAge(plant.date_of_planting);
-
-    // ✅ GREETING HEADER (ONLY ADDITION)
-    const greetingText = `Hi! I'm ${plant.common_name}, flourishing at HKBK 🌿.`;
-
-    // ---------- PAGE CONTENT (TABLE STYLE – SAME AS OLD) ----------
+    // ---------- INITIAL PAGE (ENGLISH DEFAULT) ----------
     container.innerHTML = `
-      <h2>${greetingText}</h2>
+      <h2 id="greetingText">${greetings.en(plant.common_name)}</h2>
 
-      <button id="speakBtn"
+      <!-- 🌐 Language / Stop Button -->
+      <button id="langBtn"
         style="margin:10px 0;padding:8px 14px;border:none;
                background:#2e7d32;color:white;
                border-radius:6px;cursor:pointer;">
-        🔊 Speak
+        🌐 Language
       </button>
 
+      <!-- Language Popup -->
+      <div id="langPopup"
+           style="display:none;position:absolute;
+                  background:#fff;border:1px solid #ccc;
+                  border-radius:6px;padding:6px;
+                  box-shadow:0 4px 12px rgba(0,0,0,0.15);">
+        <div data-lang="en">English</div>
+        <div data-lang="kn">ಕನ್ನಡ</div>
+        <div data-lang="ta">தமிழ்</div>
+        <div data-lang="te">తెలుగు</div>
+        <div data-lang="ml">മലയാളം</div>
+        <div data-lang="hi">हिन्दी</div>
+      </div>
+
       <table class="plant-table">
-        <tr>
-          <th>Scientific Name</th>
-          <td>My scientific name is ${plant.scientific_name || "still being studied"}.</td>
-        </tr>
-        <tr>
-          <th>Category</th>
-          <td>I belong to the ${plant.category || "plant"} category.</td>
-        </tr>
-        <tr>
-          <th>Origin</th>
-          <td>
-            ${plant.origin
-              ? `I originally come from ${plant.origin}, but now I happily grow here.`
-              : "My origin is a bit of a mystery."}
-          </td>
-        </tr>
-        <tr>
-          <th>Date of Planting</th>
-          <td>
-            ${plant.date_of_planting
-              ? `I was planted on ${plant.date_of_planting}.`
-              : "I don’t remember the exact date I was planted 🌱."}
-          </td>
-        </tr>
-        <tr>
-          <th>Age</th>
-          <td>${ageText}</td>
-        </tr>
-        <tr>
-          <th>Seasonal Flowering</th>
-          <td>
-            ${plant.seasonal_flowering
-              ? `I bloom during ${plant.seasonal_flowering}.`
-              : "I may surprise you with flowers anytime!"}
-          </td>
-        </tr>
-        <tr>
-          <th>Quantitative Data</th>
-          <td>
-            ${plant.quantitative_data
-              ? `Here’s a fun fact about me: ${plant.quantitative_data}.`
-              : "I don’t have extra numbers to share yet."}
-          </td>
-        </tr>
-        <tr>
-          <th>Geo Location</th>
-          <td>
-            ${plant.geo_location
-              ? `You can find me at ${plant.geo_location}.`
-              : "My exact location is kept private."}
-          </td>
-        </tr>
-        <tr>
-          <th>Max Height</th>
-          <td>
-            ${plant.max_height
-              ? `I can grow up to ${plant.max_height}.`
-              : "I’m still growing taller!"}
-          </td>
-        </tr>
-        <tr>
-          <th>Water Requirement</th>
-          <td>
-            ${plant.water_requirement
-              ? `I grow best with ${plant.water_requirement}.`
-              : "I’m not very picky about water."}
-          </td>
-        </tr>
-        <tr>
-          <th>Medicinal Value</th>
-          <td>
-            ${plant.medicinal_value
-              ? `People value me because ${plant.medicinal_value}.`
-              : "I don’t have known medicinal uses."}
-          </td>
-        </tr>
-        <tr>
-          <th>Additional Info</th>
-          <td>
-            ${plant.additional_info || "That’s all about me for now 😊."}
-          </td>
-        </tr>
-        <tr>
-          <th>Images</th>
-          <td>${imagesHTML}</td>
-        </tr>
+        <tr><th>Scientific Name</th><td>My scientific name is ${plant.scientific_name || "still being studied"}.</td></tr>
+        <tr><th>Category</th><td>I belong to the ${plant.category || "plant"} category.</td></tr>
+        <tr><th>Origin</th><td>${plant.origin ? `I originally come from ${plant.origin}.` : "My origin is a bit of a mystery."}</td></tr>
+        <tr><th>Date of Planting</th><td>${plant.date_of_planting || "-"}</td></tr>
+        <tr><th>Age</th><td>${ageText}</td></tr>
+        <tr><th>Seasonal Flowering</th><td>${plant.seasonal_flowering || "-"}</td></tr>
+        <tr><th>Quantitative Data</th><td>${plant.quantitative_data || "-"}</td></tr>
+        <tr><th>Geo Location</th><td>${plant.geo_location || "-"}</td></tr>
+        <tr><th>Max Height</th><td>${plant.max_height || "-"}</td></tr>
+        <tr><th>Water Requirement</th><td>${plant.water_requirement || "-"}</td></tr>
+        <tr><th>Medicinal Value</th><td>${plant.medicinal_value || "-"}</td></tr>
+        <tr><th>Additional Info</th><td>${plant.additional_info || "-"}</td></tr>
+        <tr><th>Images</th><td>${imagesHTML}</td></tr>
       </table>
     `;
 
-    // ---------- SPEAK (GREETING + CONTENT, NO HEADINGS) ----------
-    const speakBtn = document.getElementById("speakBtn");
-    let isSpeaking = false;
+    const langBtn = document.getElementById("langBtn");
+    const popup = document.getElementById("langPopup");
+    const greetingEl = document.getElementById("greetingText");
 
-    speakBtn.addEventListener("click", () => {
-      if (!isSpeaking) {
-        const contentText =
-          greetingText + " " +
-          Array.from(container.querySelectorAll("td"))
-            .map(td => td.innerText)
-            .join(" ");
+    // Toggle popup
+    langBtn.addEventListener("click", () => {
+      if (isSpeaking) {
+        window.speechSynthesis.cancel();
+        isSpeaking = false;
+        langBtn.textContent = "🌐 Language";
+        return;
+      }
+      popup.style.display = popup.style.display === "block" ? "none" : "block";
+    });
 
-        const utterance = new SpeechSynthesisUtterance(contentText);
-        utterance.lang = "en-IN";
+    // Language selection
+    popup.querySelectorAll("div").forEach(item => {
+      item.addEventListener("click", () => {
+        popup.style.display = "none";
+        currentLang = item.dataset.lang;
+
+        const greeting = greetings[currentLang](plant.common_name);
+        greetingEl.textContent = greeting;
+
+        utterance = new SpeechSynthesisUtterance(greeting);
+        utterance.lang = speechLang[currentLang];
         utterance.rate = 1;
 
         utterance.onend = () => {
           isSpeaking = false;
-          speakBtn.textContent = "🔊 Speak";
+          langBtn.textContent = "🌐 Language";
         };
 
         window.speechSynthesis.cancel();
         window.speechSynthesis.speak(utterance);
 
-        speakBtn.textContent = "⏹ Stop";
+        langBtn.textContent = "⏹ Stop";
         isSpeaking = true;
-      } else {
-        window.speechSynthesis.cancel();
-        speakBtn.textContent = "🔊 Speak";
-        isSpeaking = false;
-      }
+      });
     });
 
   } catch (err) {
@@ -197,7 +165,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 });
 
-// Stop speech on page exit
+// Stop speech if page unloads
 window.addEventListener("beforeunload", () => {
   window.speechSynthesis.cancel();
 });
